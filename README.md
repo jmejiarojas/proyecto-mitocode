@@ -1,5 +1,5 @@
 # proyecto-mitocode
-Proyecto Final dle Curso de JEE de mitocode Network. Incluye JPA, JSF2, EJB, CDI.
+Proyecto Final del Curso de JEE de mitocode Network. Incluye JPA, JSF2, EJB, CDI.
 
 Requerimientos:
 
@@ -24,3 +24,10 @@ Paso 3:
 Ir a propiedades del proyecto, o dar ALT + Enter. Escribir la palabra facets y revisar en el panel izquierdo que Dynamic Web Module este chekado en la version 3.1. En el ultimo panel, el del extremo izquiedo, ir a la pestania de Runtimes y chekar a wildfly10 Runtime. Darle solo a APLY, no a Aply and Close. Regresar al buscador y borrar la busqueda y digitar Java Server Faces, ahi tenemos que chekar que el combo Type, este en la opcion "Library provided by target runtime".
 
 Nota: Como nos dimos cuenta en el archivo pom.xml, el jsf-api como el jsf-impl tienen el atributo de provided, esto quiere decir que el servidor de aplicaciones wildfly es el que provee estas apis. Y es por eso tambien que en las "proiedades del proyecto" hemos configurado para que el JSF reciba del Wildfly estas especificaciones.
+
+Paso 4:
+
+Como observamos nos sigue marcando error el IDE, es proque aun nos falta crear el archivo web.xml.
+Nos dirigimos a "Deployment Descriptor" le damos click derecho y elegimos "Generate Deployment Descriptor".
+Esto nos genera un archivo en "src/main/webapp/WEB-INF/web.xml".
+Este archivo por defecto nos sale con la version "2.5", ir a Gist o pastebin y reemplazar el codigo del "3.1".
