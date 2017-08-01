@@ -5,6 +5,9 @@ import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 import pe.cibertec.dao.IPersonaDAO;
 import pe.cibertec.models.Persona;
@@ -17,10 +20,26 @@ public class PersonaDAOImpl implements IPersonaDAO, Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	EntityManagerFactory factory = Persistence.createEntityManagerFactory("PersonalPSQLPU");
+	EntityManager manager = factory.createEntityManager();
 
 	@Override
 	public void registrar(Persona persona) throws Exception {
-		System.out.println("Registrando la persona");
+		//System.out.println("Registrando la persona");
+		try {
+			manager.getTransaction().begin(); //Indicamos que vamos a iniciar la transaccion
+			manager.persist(persona);
+			manager.getTransaction().commit();
+		} catch (Exception e) {
+			if(manager.getTransaction().isActive()) {
+				manager.getTransaction().rollback();
+			}
+			e.printStackTrace();
+		}finally {
+			manager.close();
+			factory.close();
+		}
 		
 	}
 
