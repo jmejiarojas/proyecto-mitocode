@@ -3,6 +3,13 @@ package pe.cibertec.models;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "persona")
 public class Persona implements Serializable{
 
 	/**
@@ -10,7 +17,10 @@ public class Persona implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	@Id
 	private int idPersona;
+	
+	@Column(name="nombres")
 	private String nombres;
 	private String apellidos;
 	private LocalDate fechaNac;
