@@ -31,3 +31,76 @@ Como observamos nos sigue marcando error el IDE, es proque aun nos falta crear e
 Nos dirigimos a "Deployment Descriptor" le damos click derecho y elegimos "Generate Deployment Descriptor".
 Esto nos genera un archivo en "src/main/webapp/WEB-INF/web.xml".
 Este archivo por defecto nos sale con la version "2.5", ir a Gist o pastebin y reemplazar el codigo del "3.1".
+
+
+*******************************************************************************************************************
+*******************************************************************************************************************
+Empezamos con la logica del negocio:
+
+Paso 0:
+
+Como estamos en un contexto de CDI es importante que nuestras clases implementen de "Serializable".
+
+Lo que es ambito, debemos tener claro que los daos, los services solo se encargan del flujo de la
+informacion por lo que las clases seran anotadas con "@RequestScoped" del paquete javax.enterprise.context.
+
+El ambito en el controller, por ejemplo "PersonaBean" debe ser "@ViewScoped" porque va a obedecer o interactuar
+con paginas.
+
+Paso 1:
+ 
+Crear todo el scaffolding: daos, models, services, controllers(beans).
+
+Todo lo anterior mencionado ya es muy conocido.
+
+Paso 2: 
+
+A los beans se les va a agregar la anotacion "@named" para CDI de javax.inject.Named.
+Tambien al bean se le va a agregar la anotacion "@ViewScoped" pero de javax.faces.view.ViewScoped por el tema de CDI.
+
+Paso 3:
+
+Importante-> Vamos a crear una carpeta en la ruta "src/main/resources" con el nombre de "META-INF",
+dentro de esa carpeta vamos a crear un archivo de definicion de beans "beans.xml", si tenemos el JBoss Tools
+instalado el asistente nos ayuda con el boilerplate del archivo.
+
+Literalmente en el archivo beans.xml, lo que hace es que va a soportar cualquier tipo de anotacion de inyeccion
+de independencias(named, inject, resources), si no tenemos este archivo no van a ser reconocidos, y van a ser
+descubiertos si es que estan "anotados".
+
+OJO: No estamos usando SPRING, estamos usando el CDI de Java Standard.
+
+Paso 4:
+
+Iniciamos con las injecciones.
+Importante-> Las injecciones van a ser anotadas en las implementaciones y no en las interfaces.
+El CDI de java es el que se encarga de rutear por detras cuando son llamadas desde el controller(beans).
+
+Nos dirigimos a la clase PersonaDAOImpl, y le colocamos la anotacion "@Named", con esto le decimos que esta
+clase es "inyectable".
+
+Para seguir el flujo, podemos observar en la clase PersonaServiceImpl que creamos una variable dao que es del
+tipo IPersonaDAO, por lo que le colocamos la anotacion @Inject. De esta manera amarramos la implementacion
+donde colocamos la anotacion "@Named"(PersonaDAOImpl) y cuando hacemos uso de una variable de tipo IPersonaDAO
+dentro del ServiceDAOImpl le colocamos la anotacion "@Inject" a dicha variabe, y de esta manera se complementan.
+
+De esta manera puedo utilizar el objeto "dao" dentro del PersonaBean, sin en ningun momento instanciarlo con
+la palabra "new".
+
+Paso 5:
+
+Ya tenemos nuestra logica implementada en el PersonaServiceImpl, ahora el controller BeanPersona, es el que 
+tendria que instanciar al ServiceImpl para poder usar sus metodos ya implementados. Pero usando CDI solo
+tendriamos que indicar en la interface "IPersonaService" que sea injectable con la anotacion "@Named",
+y dentro del controller BeanPersona, cuando creemos una variable del tipo IPersonaService tendriamos
+que agregarle la anotacion "@Inject" y de esta manera volvemos a amarrar nuestra logica, sin tener que hacer
+uso de la palabra reservada "new".
+
+**A manera de nemotecnia, podemos saber como colocar las etiquetas "@Named" cuando tenemos la seguridad
+que esa clase "Impl", va a ser llamada de una clase superior, por ejemplo, cuando la clase PersonaDAOImpl
+va a ser llamada en la clase ServiceImpl, ahi tenemos la seguridad de colocarle la etiqueta "@Named" a nuestra
+clase de implementacion PersonaDAOImpl. Al colocar la etiqueta "@Named" en otras palabras le indicamos que
+la clase es "inyectable".
+
+
+
