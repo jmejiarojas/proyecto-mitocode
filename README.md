@@ -102,5 +102,26 @@ va a ser llamada en la clase ServiceImpl, ahi tenemos la seguridad de colocarle 
 clase de implementacion PersonaDAOImpl. Al colocar la etiqueta "@Named" en otras palabras le indicamos que
 la clase es "inyectable".
 
+********************************************************************************************************************
+********************************************************************************************************************
 
+Trabajando con JPA
+
+Paso 1:
+
+Creamos en nuestra carpeta "src/main/resources/META-INF" nuestro archivo "persistence.xmnl".
+Para escribir el contenido de nuestro archivo persistence.xml nos guiamos de Gist o de Pastebin.
+
+Paso 2:
+
+Empezamos con las anotaciones a nuestras entidades. Todas son del paquete "javax.persistence"
+
+@Entity -> Para indicar que JPA lo va a manejar como una entidad.
+@Id -> Es la llave primaria de la Entidad.
+@Column -> Para personalizar el nombre que va a tener el campo en la tabla.
+
+Paso 3:
+
+En la clase PersonaDAOImpl, donde esta nuestra logica real, es ahi donde instanciaremos a nuestro EntitiFactory,
+este a su vez nos permite crear el EntityManager que es con el que vamos a manejar las operaciones con la BD.
 
