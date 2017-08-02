@@ -2,17 +2,30 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:h="http://java.sun.com/jsf/html"> 
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"> 
 
 <h:head></h:head> 
 <body> 
 
-	<h:head></h:head>
-	<body>
-		<h:form>
-			<h:commandButton action="#{personaBean.pruebaCDI()}" value="Probar CDI" />
-		</h:form>
-	</body>
-
+	<h:form>
+		<h:commandButton action="#{personaBean.pruebaCDI()}" value="Probar CDI" />
+		
+		<p:dataTable value="#{personaBean.listaPersonas}" var="persona">
+			<p:column headerText="Id">
+				<p:outputLabel value="#{persona.idPersona}"/>
+			</p:column>
+			
+			<p:column headerText="Nombres">
+				<p:outputLabel value="#{persona.nombres}"/>
+			</p:column>
+			
+			<p:column headerText="Apellidos">
+				<p:outputLabel value="#{persona.apellidos}"/>
+			</p:column>
+		</p:dataTable>
+		
+	</h:form>
+	
 </body> 
 </html>

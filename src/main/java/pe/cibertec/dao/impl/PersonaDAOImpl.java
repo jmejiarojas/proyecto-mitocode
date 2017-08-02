@@ -8,6 +8,7 @@ import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 
 import pe.cibertec.dao.IPersonaDAO;
 import pe.cibertec.models.Persona;
@@ -51,8 +52,19 @@ public class PersonaDAOImpl implements IPersonaDAO, Serializable{
 
 	@Override
 	public List<Persona> listar() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		List<Persona> lista = null;
+		
+		try {
+			Query query = manager.createQuery("FROM Persona p");
+			//lista = (List<Persona>) manager.createNativeQuery("SELECT * FROM PERSONA");
+			lista = (List<Persona>)query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			manager.close();
+			factory.close();
+		}
+		return lista;
 	}
 
 }

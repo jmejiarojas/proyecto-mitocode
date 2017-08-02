@@ -35,8 +35,7 @@ public class PersonaServiceImpl implements IPersonaService, Serializable {
 
 	@Override
 	public List<Persona> listar() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		return dao.listar();
 	}
 
 }
