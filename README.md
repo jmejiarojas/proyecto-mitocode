@@ -125,3 +125,18 @@ Paso 3:
 En la clase PersonaDAOImpl, donde esta nuestra logica real, es ahi donde instanciaremos a nuestro EntitiFactory,
 este a su vez nos permite crear el EntityManager que es con el que vamos a manejar las operaciones con la BD.
 
+Se crea los metodos de listarPersonas dentro del PersonaDAOImpl, como punto importante a destacar es que la linea
+
+"Query query = manager.createQuery("FROM Persona p");" , la palabra Persona esta en mayuscula y asi debe estar
+porque no estamos haciendo referencia a nuestra tabla en la BD, sino estamos haciendo referencia a la entidad
+"Persona" y se debe respetar la mayuscula.
+
+Paso 4:
+
+En el controlador PersonaBean, vemos como interactuamos con la capa de Servicio, hay un concepto nuevo que es
+el "@PostConstructor" , y es ahi donde nosotros vamos a iniciar nuestras variables.
+
+Si lo que queremos es mostrar un listado al cargarse la pagina, entonces tenemos que crear una variable lstPersonas
+con su metodo getter y setter para que sea accesible desde mi JSF, y tenemos que cargar dicha variable lstPersona
+en el constructor, para que al cargarse la pagina se vea nuestra data.
+
