@@ -12,6 +12,7 @@
 			value="Probar CDI" />
 
 		<p:dataTable value="#{personaBean.listaPersonas}" var="persona"
+			emptyMessage="No hay personas con el criterio del filtro"
 			widgetVar="personasTable"
 			rows="10" paginator="true"
 			currentPageReportTemplate="Mostrando {startRecord}-{endRecord} de {totalRecords} registros"

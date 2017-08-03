@@ -140,3 +140,12 @@ Si lo que queremos es mostrar un listado al cargarse la pagina, entonces tenemos
 con su metodo getter y setter para que sea accesible desde mi JSF, y tenemos que cargar dicha variable lstPersona
 en el constructor, para que al cargarse la pagina se vea nuestra data.
 
+Paso 5:
+
+Todo desde ahora ya se maneja en la vista que son los archivos ".xhtml", para eso es recomendable guiarse de la 
+documentacion oficial de Primefaces.
+
+Como tip, el "filterGlobal" esta amarrado al "widgetVar", ademas para que funcione el filtro global tiene que estar
+habilitado el "filterBy".
+
+Otro tip mas es poner el "filterMatchMode" en "contains" que es lo mas recomendable de cara al usuario final.
