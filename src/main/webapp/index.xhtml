@@ -1,31 +1,34 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui"> 
-
-<h:head></h:head> 
-<body> 
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>Mi primera aplicacion</h:head>
+<body>
 
 	<h:form>
-		<h:commandButton action="#{personaBean.pruebaCDI()}" value="Probar CDI" />
-		
-		<p:dataTable value="#{personaBean.listaPersonas}" var="persona">
+		<h:commandButton action="#{personaBean.pruebaCDI()}"
+			value="Probar CDI" />
+
+		<p:dataTable value="#{personaBean.listaPersonas}" var="persona"
+			rows="10" paginator="true"
+			currentPageReportTemplate="Mostrando {startRecord}-{endRecord} de {totalRecords} registros"
+			paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} ">
 			<p:column headerText="Id">
-				<p:outputLabel value="#{persona.idPersona}"/>
+				<p:outputLabel value="#{persona.idPersona}" />
 			</p:column>
-			
+
 			<p:column headerText="Nombres">
-				<p:outputLabel value="#{persona.nombres}"/>
+				<p:outputLabel value="#{persona.nombres}" />
 			</p:column>
-			
+
 			<p:column headerText="Apellidos">
-				<p:outputLabel value="#{persona.apellidos}"/>
+				<p:outputLabel value="#{persona.apellidos}" />
 			</p:column>
 		</p:dataTable>
-		
+
 	</h:form>
-	
-</body> 
+
+</body>
 </html>

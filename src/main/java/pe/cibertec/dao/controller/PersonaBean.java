@@ -43,9 +43,9 @@ public class PersonaBean implements Serializable{
 	public void pruebaCDI() throws Exception {
 		
 		Persona persona = new Persona();
-		persona.setIdPersona(1);
-		persona.setNombres("Julio");
-		persona.setApellidos("Mejia Rojas");
+		persona.setIdPersona(2);
+		persona.setNombres("Juan");
+		persona.setApellidos("Robles");
 		persona.setSexo("M");
 		persona.setTelefono("123456789");
 		persona.setDireccion("mi casa");
