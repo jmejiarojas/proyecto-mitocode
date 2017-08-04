@@ -149,3 +149,50 @@ Como tip, el "filterGlobal" esta amarrado al "widgetVar", ademas para que funcio
 habilitado el "filterBy".
 
 Otro tip mas es poner el "filterMatchMode" en "contains" que es lo mas recomendable de cara al usuario final.
+
+
+********************************************************************************************************************
+********************************************************************************************************************
+
+Trabajando con EJB:
+
+En palabras sencillas, EJB es una especificacion que contiene a JPA por dentro, es mayr y mas grande que JPA.
+
+EJB nos brinda Persistencia, Transacciones, Seguridad; cosas que JPA no nos brinda y tendriamos que apoyarnos
+en librerias, digamos que EJB es una tecnologia "JPA con superpoderes".
+
+
+Paso 1:
+
+Vamos a configurar el persistence.xml para que soporte un pool de conexiones.
+
+Se usa un pool de conexiones para poder aceptar solicitudes del servidor como si fuese un pulpo, cada conexion
+que se le hace al servidor va a hacer administrada por cada tentaculo, obviamente esto es una analogia.
+
+La configuracion basica(sin pool) es como si fuese una sola autopista por donde van a pasar las conexiones,
+en este caso solo una autopista; en cambio, con el pool de conexiones es como si hubieras 10 autopistas.
+
+La configuracion del servidor Wildfly para Postgres y MySql esta en el video 6 parte 1.
+
+Nota: Para configurar con Postgres, se utiliza un asistente.
+Para ello tenemos que digitar el link, chekamos que este levantado el servidor widlfly, "localhost:990.
+Para esto tenemos que haber creado un usuario de wildfly, se adjunta documentacion en drive o en el material
+relacionado del curso.
+
+*Le damos a la opcion "ADD" donde buscamos nuestro conector de postgres en el disco duro "postgres9.4-jdbc.jar".
+*Luego le ponemos un nombre familiar, el runtime es tal cual y le damos a Finish.
+
+Luego tenemos que crear un DataSource:
+
+*Estando en la pestania "Home", seleccionamos la opcion "Configuration/Start".
+*Le damos a "SuSystem", luego elegimos "DataSources". En type, elegimos "Non-XA".
+*Luego elegimos la opcion "Add" que esta en la columnda "DataSources".
+*En la ventana que se desplego, elegimos para "Postgres DataSource".
+*En la ventana, el campo Name, colocamos un nombre para el DataSource.
+*OJO: En el campo JDNI, es el campo importante, y este nombre que va a ir en el persistence.xml.
+*Damos Next, elegimos el postgres.jar que asociamos en el deployment(El primer paso).
+*Damos Next, y nos vamos a la pestania "Detected driver" y elegimos el postgres.jar del inicio.
+*Damos Next, y llenamos con las credenciales de nuestro postgres y la BD que vamos a usar.
+
+
+
