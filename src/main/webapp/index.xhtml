@@ -4,41 +4,58 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://primefaces.org/ui">
-<h:head>Mi primera aplicacion</h:head>
+<h:head></h:head>
 <body>
 
 	<h:form>
-		<h:commandButton action="#{personaBean.pruebaCDI()}"
+		<p:commandButton value="Nuevo"
+			onclick="PF('widgetDialogPersona').show();" />
+		<p:commandButton action="#{personaBean.pruebaCDI()}"
 			value="Probar CDI" />
 
 		<p:dataTable value="#{personaBean.listaPersonas}" var="persona"
 			emptyMessage="No hay personas con el criterio del filtro"
-			widgetVar="personasTable"
-			rows="10" paginator="true"
+			widgetVar="personasTable" rows="10" paginator="true"
 			currentPageReportTemplate="Mostrando {startRecord}-{endRecord} de {totalRecords} registros"
 			paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} ">
-			
+
 			<f:facet name="header">
 				<p:outputPanel>
 					<h:outputText value="Buscar todos los filtros:" />
-					<p:inputText id="globalFilter" 
-					onkeyup="PF('personasTable').filter()"
-					style="width:190px" placeholder="Digite palabra clave"/>
+					<p:inputText id="globalFilter"
+						onkeyup="PF('personasTable').filter()" style="width:190px"
+						placeholder="Digite palabra clave" />
 				</p:outputPanel>
 			</f:facet>
-			
-			<p:column headerText="Id" filterBy="#{persona.idPersona}" filterMatchMode="contains">
+
+			<p:column headerText="Id" filterBy="#{persona.idPersona}"
+				filterMatchMode="contains">
 				<p:outputLabel value="#{persona.idPersona}" />
 			</p:column>
 
-			<p:column headerText="Nombres" filterBy="#{persona.nombres}" filterMatchMode="contains">
+			<p:column headerText="Nombres" filterBy="#{persona.nombres}"
+				filterMatchMode="contains">
 				<p:outputLabel value="#{persona.nombres}" />
 			</p:column>
 
-			<p:column headerText="Apellidos" filterBy="#{persona.apellidos}" filterMatchMode="contains">
+			<p:column headerText="Apellidos" filterBy="#{persona.apellidos}"
+				filterMatchMode="contains">
 				<p:outputLabel value="#{persona.apellidos}" />
 			</p:column>
 		</p:dataTable>
+
+		<p:dialog id="dlgPersona" widgetVar="widgetDialogPersona">
+			<h:panelGrid columns="2">
+				<p:outputLabel value="Nombres" />
+				<p:inputText value="#{personaBean.persona.nombres}" />
+
+				<p:outputLabel value="Apellidos" />
+				<p:inputText value="#{personaBean.persona.apellidos}" />
+
+				<p:commandButton action="#{personaBean.pruebaCDI()}"
+					value="Registrar" />
+			</h:panelGrid>
+		</p:dialog>
 
 	</h:form>
 

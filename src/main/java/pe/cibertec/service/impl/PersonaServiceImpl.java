@@ -3,6 +3,7 @@ package pe.cibertec.service.impl;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -19,7 +20,7 @@ public class PersonaServiceImpl implements IPersonaService, Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	@Inject
+	@EJB
 	private IPersonaDAO dao;
 	
 	@Override

@@ -13,24 +13,27 @@ import pe.cibertec.service.IPersonaService;
 
 @Named
 @ViewScoped
-public class PersonaBean implements Serializable{
-	
+public class PersonaBean implements Serializable {
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	@Inject
 	private IPersonaService personaService;
-	
-	//Manejamos una lista de personas
+
+	@Inject
+	Persona persona;
+
+	// Manejamos una lista de personas
 	List<Persona> listaPersonas;
-	
+
 	@PostConstruct
 	public void init() {
 		listar();
 	}
-	
+
 	private void listar() {
 		try {
 			listaPersonas = personaService.listar();
@@ -41,16 +44,8 @@ public class PersonaBean implements Serializable{
 	}
 
 	public void pruebaCDI() throws Exception {
-		
-		Persona persona = new Persona();
-		persona.setIdPersona(2);
-		persona.setNombres("Juan");
-		persona.setApellidos("Robles");
-		persona.setSexo("M");
-		persona.setTelefono("123456789");
-		persona.setDireccion("mi casa");
-		
-		personaService.registrar(persona); //Registrando
+
+		personaService.registrar(persona);
 	}
 
 	public List<Persona> getListaPersonas() {
@@ -60,5 +55,13 @@ public class PersonaBean implements Serializable{
 	public void setListaPersonas(List<Persona> listaPersonas) {
 		this.listaPersonas = listaPersonas;
 	}
-	
+
+	public Persona getPersona() {
+		return persona;
+	}
+
+	public void setPersona(Persona persona) {
+		this.persona = persona;
+	}
+
 }
