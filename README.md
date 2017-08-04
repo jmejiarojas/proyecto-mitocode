@@ -193,6 +193,61 @@ Luego tenemos que crear un DataSource:
 *Damos Next, elegimos el postgres.jar que asociamos en el deployment(El primer paso).
 *Damos Next, y nos vamos a la pestania "Detected driver" y elegimos el postgres.jar del inicio.
 *Damos Next, y llenamos con las credenciales de nuestro postgres y la BD que vamos a usar.
+ Dejamos el campo "Security Domain" vacio.
+*Damos Next y observamos todo el resumen de lo que hemos configurado.
+*Damos click a Finish y un mensaje verde modal debe confirmarlo.
+*Luego de esto vemos en la columna de DataSources, nuestro DataSource creado, lo seleccionamos
+ y elegimos su opcion "Test connection", si todo esta ok, debe mostrarnos un mensaje de "success".
 
+Paso 2:
 
+Configuramos nuestro archivo persistence.xml para hacer uso de JTA.
+Como nos damos cuenta, ahora no va a ser necesario referenciar nuestros beans en dicho archivo.
+Al hacer uso del "TransaccionType = JTA", no va a ser necesario usar el metodo de los Management "beginTransaction",
+ni tampoco cerrarlos("close").
+En "jta-data-source" nosotros tenemos que referenciar al DataSource que hemos creado en la configuaracion con el 
+Wildfly.
 
+Otra etiqueta importante aca es la property:
+"<property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>". Esta
+propiedad lo que hace es borrar el contenido de la BD y volver a crear todo de nuevo.
+Cuando arrancamos la aplicacion, si hay algo lo va a destruir y la vuelve a crear, sino hay nada lo crea.
+
+Paso 3:
+
+Ahora nos dirigimos a la clase PersonaDAOImpl, donde como estamos en un contexto de EJB, tenemos que usar sus
+propias anotaciones, en este caso la anotacion "@Stateless" que en castellano es "sin estado", nos permite
+reemplazar al "@Named" y al "@RequestScoped", entonces cuando colocamos la anotacion "Stateless", estamos diciendo
+que nuestro "bean" va a ser inyectable(Named) y ademas solo es un puente recibe y enviar datos(RequestScoped).
+
+Paso 4:
+
+Podemos apreciar una nueva anotacion "@PersistenceContext" que me permite crear un EntityManager sin el uso
+de una Factoria y con solo referenciar a la unidad de persistencia o si es una sola se referencia por default.
+Como ya he mencionado anteriormente, el uso de JTA permite que todo se maneje de manera transacional, evitando
+abrir y cerrar conecciones del EntityManager, ni tampoco "commitearlas" ni "rollbackearlas".
+
+El siguiente paso es ir a la interface que provee los metodos a nuestro DAOImpl, me refiero al IPersonaDAO,
+cuando trabajamos en un contexto de EJB, es necesario "anotar" a nuestra interfaz, hay dos opciones,anotarla
+con "@Local" o con "@Remote". Por regla general casi siempre se trabaja con "@Local".
+Las "Local" es que va a ser ejecutadas en la misma JVM que esta en el mismo servidor, es el mas comun.
+El "Remote" es cuando nuestros EJB van a ser ejecutados en otra JVM de otro servidor.
+
+Ahora nos dirigimos a quien es el que va a usar nuestra implmentacion, en este caso es nuestro "ServiceImpl",
+y en vez de usar la anotacion "Inject" de CDI, vamos a usar la anotacion "EJB" pues estamos en un contexto de EJB.
+
+Paso 5:
+
+Para seguir usando CDI, vamos a tener que hacer nuestras Entidades que sean injectables, pero no podemos poner
+"@Named" con su ambito "@RequestScoped" a nuestras Entidades y hacer eso rompe con el concepto de las entidades,
+ya que las entidades no tiene estado pues son simplemente clases, para poder configurar esto vamos a tener que cambiar en nuestro archivo "beans.xml". 
+
+Podemos observar que inicialmente configuramos el "discovery-mode" como "anotado", lo que vamos a hacer ahora es
+que el "discovery-mode" va a tener el valor de "all".
+
+Al colocar "all" se podria decir que le estamos diciendo al archivo "beans.xml" es que se van a inyectar los beans
+sea como sea la forma que esten inyectandose. Esto quiere decir que se va a poder inyectar a los beans asi no tengan
+la anotacion de los "Scope".
+
+Una vez hecho esto, en nuestro controlador "PersonaBean" ya podemos colocar la anotacion "@Inject" sobre nuestra
+entidad y ya no usar la palabra "new".
