@@ -20,7 +20,7 @@ public class Persona implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO )
 	private int idPersona;
 	
 	@Column(name="nombres")
@@ -30,6 +30,7 @@ public class Persona implements Serializable{
 	private String sexo;
 	private String telefono;
 	private String direccion;
+	public String email;
 	
 	public int getIdPersona() {
 		return idPersona;

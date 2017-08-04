@@ -19,6 +19,8 @@ Paso 2:
 
 Colocar las dependencias en el archivo pom.xml, se recomienda reutilizar del Gist o Pastebin. Dar Alt + F5 para actualizar las depedencias de Maven.
 
+Dato: Cuando anotamos que nos vamos a apoyar en "javaee-api" en en pom.xml, le estamos diciendo que nos vamos a apoyar en la especificacion de JPA y la implementacion es de HIBERNATE, todo esto nos lo provee "wildfly" por la palabra reservada "provided".
+
 Paso 3:
 
 Ir a propiedades del proyecto, o dar ALT + Enter. Escribir la palabra facets y revisar en el panel izquierdo que Dynamic Web Module este chekado en la version 3.1. En el ultimo panel, el del extremo izquiedo, ir a la pestania de Runtimes y chekar a wildfly10 Runtime. Darle solo a APLY, no a Aply and Close. Regresar al buscador y borrar la busqueda y digitar Java Server Faces, ahi tenemos que chekar que el combo Type, este en la opcion "Library provided by target runtime".
