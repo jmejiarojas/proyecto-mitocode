@@ -30,7 +30,8 @@
 		<jta-data-source>java:/PersonalDS</jta-data-source>
 		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 		<properties>
-			<property name="hibernate.hbm2ddl.auto" value="update"/>
+<!-- 			<property name="hibernate.hbm2ddl.auto" value="update"/> -->
+			<property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
 		</properties>
 	</persistence-unit>
 	
@@ -38,7 +39,7 @@
 <!-- 		<jta-data-source>java:/mysqlDS</jta-data-source> -->
 <!-- 		<exclude-unlisted-classes>false</exclude-unlisted-classes> -->
 <!-- 		<properties> -->
-<!-- 			<property name="javax.persistence.schema-generation.database.action" value="drop-ad-create"/> -->
+<!-- 			<property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/> -->
 <!-- 		</properties> -->
 <!-- 	</persistence-unit> -->
 	

@@ -253,3 +253,38 @@ la anotacion de los "Scope".
 
 Una vez hecho esto, en nuestro controlador "PersonaBean" ya podemos colocar la anotacion "@Inject" sobre nuestra
 entidad y ya no usar la palabra "new".
+
+********************************************************************************************************************
+********************************************************************************************************************
+
+Proyecto de Gestion de Contratos
+
+El proyecto final del curso consta de la realizacion de un sistema que va a gestionar el correo de las personas.
+Tiene como base todo lo anterior ya desarrollado.
+Ya tenemos configurado el "beans.xml", asi como tambien el persistence.xml.
+
+Paso 1:
+
+Para este primer paso, ya tenemos que contar con nuestro diagrama de clases en UML para ver las relaciones
+de nuestras futuras tablas.
+
+Mapeamos nuestras tablas a objetos. Cuando se ejecute el proyecto, y como el persistence.xml esta configurado
+en "drop-and-create", cada vez que levantemos la aplicacion se va a crear la estrucutra de nuestra BD.
+
+Las Entidades son todas intuitivas cuando es una relaciond de "Uno a muchos", como de "Uno a uno", pero cuando
+tenemos una tabla con llave primaria compuesta, ahi es donde se hace un artificio y se crea una entidad Extra, 
+que luego es referenciada a la Entidad con llave compuesta. En este caso la Entidad "Contrato" es la que tiene
+la llave primaria compuesta y la entidad que se crea para que gestione sus llaves primaria es "ContratoPK".
+
+Paso 2:
+
+En la clase "ContratoPK", debemos crear los metodos "equals" and "hashCode" porque tiene atributos que son objetos
+y para poder diferenciarlos debemos hacer ello.
+
+Como vemos nuestra llave compuesta en ContratoPK, hace referencia a la Entidad Persona y Puesto, y ahora debemos
+crear por ende sus metodos equals and hashCode respectivamente; hay un detalle importante, esta Entidad permite
+diferenciarse del resto por su id, es por eso que en ambas entidades(Persona y Puesto) nosotros vamos a crear
+los metodos equals and hashCode haciendo referencia solo al atributo "id" de cada entidad.
+
+Para referenciar a la entidad "Contrato" su clase que es llave foranea "ContratoPK" se le tiene que agregar la
+anotacion "@IdClass(ContratoPK.class)"
