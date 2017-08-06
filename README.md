@@ -288,3 +288,14 @@ los metodos equals and hashCode haciendo referencia solo al atributo "id" de cad
 
 Para referenciar a la entidad "Contrato" su clase que es llave foranea "ContratoPK" se le tiene que agregar la
 anotacion "@IdClass(ContratoPK.class)"
+
+Paso 3:
+
+En este paso trabajaremos con la vista y con los detalles que esta conlleva.
+El primer detalle que sale a la vista es de que el control de primefaces llamado "p:calendar" recibe como argumento
+un "Date" y nosotros en la entidad persona lo estamos manejando como "LocalDate", es por eso que en el controller
+vamos a hacer una pequenia conversion para pasar el valor capturado en la vista a un objeto LocalDate y de esta
+manera sea "persistido" en la BD.
+
+Como vamos a trabajar con imagenes, tenemos que poner en el "commandButton" en su propiedad "ajax" a false; ademas
+en el formulario indicar a "enctype = multipart/form-data".

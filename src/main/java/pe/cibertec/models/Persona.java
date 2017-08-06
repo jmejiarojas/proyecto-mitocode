@@ -39,7 +39,7 @@ public class Persona implements Serializable {
 	@Column(name = "direccion", length = 100, nullable = false)
 	private String direccion;
 	
-	private Byte[] foto;
+	private byte[] foto;
 	
 	@Transient
 	private String campoAuxiliar;
@@ -92,11 +92,11 @@ public class Persona implements Serializable {
 		this.direccion = direccion;
 	}
 
-	public Byte[] getFoto() {
+	public byte[] getFoto() {
 		return foto;
 	}
 
-	public void setFoto(Byte[] foto) {
+	public void setFoto(byte[] foto) {
 		this.foto = foto;
 	}
 
