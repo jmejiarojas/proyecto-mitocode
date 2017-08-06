@@ -1,0 +1,9 @@
+Para poder ejecutar el archivo de python "der.py", si estamos en linux debemos ejecutar estos comandos:
+
+sudo apt-get install graphviz-dev python-pygraphviz python-psycopg2
+pip install eralchemy
+apt install python-pip
+
+Para mas info este link:
+
+url: https://anthonysotolongo.wordpress.com/2015/05/25/obtener-el-diagrama-relacional-desde-una-bases-de-datos-postgresqlingenieria-inversa/

@@ -1,6 +1,7 @@
 package pe.cibertec.dao.impl;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -16,13 +17,13 @@ import pe.cibertec.dao.IPersonaDAO;
 import pe.cibertec.models.Persona;
 
 @Stateless
-public class PersonaDAOImpl implements IPersonaDAO, Serializable{
+public class PersonaDAOImpl implements IPersonaDAO, Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	@PersistenceContext(unitName = "PersonalPU")
 	private EntityManager manager;
 
@@ -37,21 +38,45 @@ public class PersonaDAOImpl implements IPersonaDAO, Serializable{
 
 	@Override
 	public void modificar(Persona persona) throws Exception {
-		// TODO Auto-generated method stub
-		
+		manager.merge(persona);
 	}
 
 	@Override
 	public List<Persona> listar() throws Exception {
 		List<Persona> lista = null;
-		
+
 		try {
 			Query query = manager.createQuery("FROM Persona p");
-			lista = (List<Persona>)query.getResultList();
+			lista = (List<Persona>) query.getResultList();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return lista;
+	}
+
+	@Override
+	public Persona listarPorId(Persona persona) throws Exception {
+		Persona per = new Persona();
+		List<Persona> lista = new ArrayList<>();
+
+		try {
+			Query query = manager.createQuery("FROM Persona p where p.idPersona = ?1");
+			query.setParameter(1, persona.getIdPersona());
+			lista = (List<Persona>) query.getResultList();
+
+			if (lista != null && !lista.isEmpty()) {
+				per = lista.get(0);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return per;
+	}
+
+	@Override
+	public void listarWS() {
+		// TODO Auto-generated method stub
 	}
 
 }

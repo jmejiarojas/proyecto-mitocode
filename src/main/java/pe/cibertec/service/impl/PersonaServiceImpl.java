@@ -30,13 +30,17 @@ public class PersonaServiceImpl implements IPersonaService, Serializable {
 
 	@Override
 	public void modificar(Persona persona) throws Exception {
-		// TODO Auto-generated method stub
-
+		dao.modificar(persona);
 	}
 
 	@Override
 	public List<Persona> listar() throws Exception {
 		return dao.listar();
+	}
+
+	@Override
+	public Persona listarPorId(Persona persona) throws Exception {
+		return dao.listarPorId(persona);
 	}
 
 }

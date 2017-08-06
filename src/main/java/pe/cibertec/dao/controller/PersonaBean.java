@@ -43,9 +43,23 @@ public class PersonaBean implements Serializable {
 		}
 	}
 
-	public void pruebaCDI() throws Exception {
+	public void registrar(){
 
-		personaService.registrar(persona);
+		try {
+			personaService.registrar(persona);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void modificar() {
+		try {
+			personaService.modificar(persona);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public List<Persona> getListaPersonas() {
