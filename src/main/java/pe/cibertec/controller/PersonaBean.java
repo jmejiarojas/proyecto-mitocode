@@ -37,12 +37,25 @@ public class PersonaBean implements Serializable {
 	private Date fechaSeleccionada;
 
 	private UploadedFile foto;
+	
+	private String titulo;
 
 	@PostConstruct
 	public void init() {
 		listar();
+		
+		this.titulo = "Registrar Persona";
 	}
 
+	public void seleccionar(Persona per) throws Exception{
+		persona = personaService.listarPorId(per);
+		Calendar cal = Calendar.getInstance();
+		cal.set(persona.getFechaNac().getYear(), persona.getFechaNac().getMonthValue(), persona.getFechaNac().getDayOfMonth());
+		this.fechaSeleccionada = cal.getTime();
+		
+		this.titulo = "Modificar Persona";
+	}
+	
 	private void listar() {
 		try {
 			listaPersonas = personaService.listar();
@@ -52,7 +65,7 @@ public class PersonaBean implements Serializable {
 		}
 	}
 
-	public void registrar() {
+	public void operar() {
 
 		try {
 			
@@ -67,6 +80,16 @@ public class PersonaBean implements Serializable {
 				LocalDate localDate = LocalDate.of(cal.get(cal.YEAR), cal.get(cal.MONTH), cal.get(cal.DAY_OF_MONTH));
 				persona.setFechaNac(localDate);
 			}
+			
+			if(persona.getIdPersona() > 0) {
+				personaService.modificar(persona);
+			}else {
+				this.titulo = "Registrar Persona";
+				personaService.registrar(persona);
+			}
+			
+			this.listar();
+			
 			personaService.registrar(persona);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -115,4 +138,11 @@ public class PersonaBean implements Serializable {
 		this.foto = foto;
 	}
 
+	public String getTitulo() {
+		return titulo;
+	}
+
+	public void setTitulo(String titulo) {
+		this.titulo = titulo;
+	}	
 }

@@ -6,7 +6,7 @@
 	xmlns:p="http://primefaces.org/ui">
 <h:head></h:head>
 <body>
-	<h:form enctype="multipart/form-data">
+	<h:form id="frm" enctype="multipart/form-data">
 		<p:commandButton value="Nuevo"
 			onclick="PF('widgetDialogPersona').show();" />
 
@@ -39,9 +39,18 @@
 				filterMatchMode="contains">
 				<p:outputLabel value="#{persona.apellidos}" />
 			</p:column>
+
+			<p:column>
+				<p:commandLink actionListener="#{personaBean.seleccionar(persona)}"
+					oncomplete="PF('widgetDialogPersona').show();"
+					update="frm:dlgPersona">
+					<p:graphicImage library="images" name="edit.jpg" />
+				</p:commandLink>
+			</p:column>
+
 		</p:dataTable>
 
-		<p:dialog id="dlgPersona" widgetVar="widgetDialogPersona" modal="true"
+		<p:dialog id="dlgPersona" widgetVar="widgetDialogPersona" modal="true" header="#{personaBean.titulo}"
 			closable="true" closeOnEscape="true" resizable="false"
 			draggable="true">
 			<h:panelGrid columns="2">
@@ -77,8 +86,8 @@
 				<h:column />
 				<h:outputText id="txtContador" />
 
-				<p:commandButton actionListener="#{personaBean.registrar()}" action="index?faces-redirect=true"
-					ajax="false" value="Registrar" />
+				<p:commandButton actionListener="#{personaBean.operar()}"
+					action="index?faces-redirect=true" ajax="false" value="Aceptar" />
 			</h:panelGrid>
 		</p:dialog>
 
