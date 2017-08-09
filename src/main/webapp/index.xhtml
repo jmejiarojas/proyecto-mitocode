@@ -4,7 +4,9 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://primefaces.org/ui">
-<h:head></h:head>
+<h:head>
+	<h:outputScript name="calendar.js" library="js"/>
+</h:head>
 <body>
 	<h:form id="frm" enctype="multipart/form-data">
 		<p:commandButton value="Nuevo"
@@ -61,7 +63,7 @@
 				<p:inputText value="#{personaBean.persona.apellidos}" />
 
 				<p:outputLabel value="Fecha Nacimiento" />
-				<p:calendar value="#{personaBean.fechaSeleccionada}" locale="es" />
+				<p:calendar value="#{personaBean.fechaSeleccionada}" pattern="dd/MM/yyyy" mask="99/99/9999" locale="es" />
 
 				<p:outputLabel value="Sexo" />
 				<p:selectOneRadio value="#{personaBean.persona.sexo}">

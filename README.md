@@ -299,3 +299,6 @@ manera sea "persistido" en la BD.
 
 Como vamos a trabajar con imagenes, tenemos que poner en el "commandButton" en su propiedad "ajax" a false; ademas
 en el formulario indicar a "enctype = multipart/form-data".
+
+Para que el componente calendar de PrimeFaces tenga una traduccion a espaniol, nosotros tenemos que agregar un
+archivo javascript en "webapp/resources/js/calendar.js". Luego de ellos referenciarlo en nustro archivo xhtml.
