@@ -1,0 +1,10 @@
+.tablaSinCabecera table thead tr {
+	display: none;
+}
+
+.tablaSinCabecera .ui-widget-content {
+	border: 1px solid #a8a8a8;
+	background: #fff;
+	color: #4f4f4f;
+	height: 35px;
+}
