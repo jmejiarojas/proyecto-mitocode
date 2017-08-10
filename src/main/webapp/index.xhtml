@@ -5,7 +5,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
-	<h:outputScript name="calendar.js" library="js"/>
+	<h:outputScript name="calendar.js" library="js" />
 </h:head>
 <body>
 	<h:form id="frm" enctype="multipart/form-data">
@@ -52,44 +52,58 @@
 
 		</p:dataTable>
 
-		<p:dialog id="dlgPersona" widgetVar="widgetDialogPersona" modal="true" header="#{personaBean.titulo}"
-			closable="true" closeOnEscape="true" resizable="false"
-			draggable="true">
+		<p:dialog id="dlgPersona" widgetVar="widgetDialogPersona" modal="true"
+			header="#{personaBean.titulo}" closable="true" closeOnEscape="true"
+			resizable="false" draggable="true">
 			<h:panelGrid columns="2">
-				<p:outputLabel value="Nombres" />
-				<p:inputText value="#{personaBean.persona.nombres}" />
+				<h:panelGrid columns="2">
+					<p:outputLabel value="Nombres" />
+					<p:inputText value="#{personaBean.persona.nombres}" />
 
-				<p:outputLabel value="Apellidos" />
-				<p:inputText value="#{personaBean.persona.apellidos}" />
+					<p:outputLabel value="Apellidos" />
+					<p:inputText value="#{personaBean.persona.apellidos}" />
 
-				<p:outputLabel value="Fecha Nacimiento" />
-				<p:calendar value="#{personaBean.fechaSeleccionada}" pattern="dd/MM/yyyy" mask="99/99/9999" locale="es" />
+					<p:outputLabel value="Fecha Nacimiento" />
+					<p:calendar value="#{personaBean.fechaSeleccionada}"
+						pattern="dd/MM/yyyy" mask="99/99/9999" locale="es" />
 
-				<p:outputLabel value="Sexo" />
-				<p:selectOneRadio value="#{personaBean.persona.sexo}">
-					<f:selectItem itemLabel="M" itemValue="M" />
-					<f:selectItem itemLabel="F" itemValue="F" />
-				</p:selectOneRadio>
+					<p:outputLabel value="Sexo" />
+					<p:selectOneRadio value="#{personaBean.persona.sexo}">
+						<f:selectItem itemLabel="M" itemValue="M" />
+						<f:selectItem itemLabel="F" itemValue="F" />
+					</p:selectOneRadio>
 
-				<p:outputLabel value="Subir Foto" />
-				<p:fileUpload value="#{personaBean.foto}" mode="simple" />
+					<p:outputLabel value="Subir Foto" />
+					<p:fileUpload value="#{personaBean.foto}" mode="simple" />
 
-				<p:outputLabel value="Foto"
-					rendered="#{personaBean.persona.idPersona != 0}" />
-				<p:graphicImage value="/imagen/#{personaBean.persona.idPersona}"
-					width="120" height="120"
-					rendered="#{personaBean.persona.idPersona != 0}" />
+					<p:outputLabel value="Foto"
+						rendered="#{personaBean.persona.idPersona != 0}" />
+					<p:graphicImage value="/imagen/#{personaBean.persona.idPersona}"
+						width="120" height="120"
+						rendered="#{personaBean.persona.idPersona != 0}" />
 
-				<p:outputLabel value="Direccion" />
-				<p:inputTextarea value="#{personaBean.persona.direccion}"
-					counter="txtContador" maxlength="150"
-					counterTemplate="{0} caracteres restantes." autoResize="false" />
+					<p:outputLabel value="Direccion" />
+					<p:inputTextarea value="#{personaBean.persona.direccion}"
+						counter="txtContador" maxlength="150"
+						counterTemplate="{0} caracteres restantes." autoResize="false" />
 
-				<h:column />
-				<h:outputText id="txtContador" />
+					<h:column />
+					<h:outputText id="txtContador" />
 
-				<p:commandButton actionListener="#{personaBean.operar()}"
-					action="index?faces-redirect=true" ajax="false" value="Aceptar" />
+					<p:commandButton actionListener="#{personaBean.operar()}"
+						action="index?faces-redirect=true" ajax="false" value="Aceptar" />
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<p:outputLabel value = "Numero"/>
+					<p:inputText value = "#{personaBean.telefono.numero}" maxlength="9"/>
+<!-- 					El comando de debajo actualiza un componente dataList con id "telefonos" -->
+					<p:commandButton value="Agregar" actionListener="#{personaBean.agregarTelefono()}" update="telefonos"/>
+					<p:dataList id="telefonos" value = "#{personaBean.listaTelefonos}" var="tel">
+						<p:inputText value="#{tel.numero}"/>
+						<p:commandLink value="Remover" actionListener="#{personaBean.removerTelefono(tel)}" update="telefonos"/>	
+					</p:dataList>
+					
+				</h:panelGrid>
 			</h:panelGrid>
 		</p:dialog>
 

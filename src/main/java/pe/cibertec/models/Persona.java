@@ -2,12 +2,16 @@ package pe.cibertec.models;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -38,11 +42,21 @@ public class Persona implements Serializable {
 
 	@Column(name = "direccion", length = 100, nullable = false)
 	private String direccion;
-	
+
 	private byte[] foto;
-	
+
+	@OneToMany(mappedBy = "persona", cascade = { CascadeType.PERSIST, CascadeType.MERGE,
+			CascadeType.REMOVE }, fetch = FetchType.EAGER, orphanRemoval = true)
+	private List<Telefono> telefonos;
+
 	@Transient
 	private String campoAuxiliar;
+
+	/**
+	 * getters & setters
+	 * 
+	 * @return
+	 */
 
 	public int getIdPersona() {
 		return idPersona;
@@ -99,6 +113,18 @@ public class Persona implements Serializable {
 	public void setFoto(byte[] foto) {
 		this.foto = foto;
 	}
+
+	public List<Telefono> getTelefonos() {
+		return telefonos;
+	}
+
+	public void setTelefonos(List<Telefono> telefonos) {
+		this.telefonos = telefonos;
+	}
+
+	/**
+	 * equals & hashCode
+	 */
 
 	@Override
 	public int hashCode() {

@@ -302,3 +302,13 @@ en el formulario indicar a "enctype = multipart/form-data".
 
 Para que el componente calendar de PrimeFaces tenga una traduccion a espaniol, nosotros tenemos que agregar un
 archivo javascript en "webapp/resources/js/calendar.js". Luego de ellos referenciarlo en nustro archivo xhtml.
+
+Nosotros vamos a querer registrar una persona con muchos telefonos, todo esto en el mismo formulario. La idea es que
+cuando terminemos de registrar los telefonos en la lista pero en memoria, cuando el demos a la opcion Registrar, recien en ese momento se graba los telefonos en la tabla correspondiente. Para todos estos detalles, noas tenemos+
+que dirigir a nuestra Entidad Persona y tenemos que agregarle un atributo "List<Persona>" con sus respectivas
+anotaciones de Hibernate y JPA.
+
+Paso 4:
+
+Vamos a tener inconvenientes cuando vamos a querer traer los telefonos de la persona, por defecto la instancia de una persona no trae los telefonos porque por defecto la carga es "Lazy Load", asi que en el mapeo de la Entidad
+Persona configuramos con el valor de "Fetch.EAGER" a fetch."

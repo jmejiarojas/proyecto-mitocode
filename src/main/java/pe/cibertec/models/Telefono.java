@@ -76,5 +76,10 @@ public class Telefono implements Serializable {
 			return false;
 		return true;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Telefono [idTelefono=" + idTelefono + ", persona=" + persona + ", numero=" + numero + "]";
+	}
+
 }
