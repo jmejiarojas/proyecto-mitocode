@@ -5,6 +5,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
+	<h:outputStylesheet name="estilos.css" library="css" />
 	<h:outputScript name="calendar.js" library="js" />
 </h:head>
 <body>
@@ -13,6 +14,7 @@
 			onclick="PF('widgetDialogPersona').show();" />
 
 		<p:dataTable value="#{personaBean.listaPersonas}" var="persona"
+			styleClass="tablaSinCabecera"
 			emptyMessage="No hay personas con el criterio del filtro"
 			widgetVar="personasTable" rows="10" paginator="true"
 			currentPageReportTemplate="Mostrando {startRecord}-{endRecord} de {totalRecords} registros"
@@ -100,13 +102,20 @@
 					<p:commandButton value="Agregar" actionListener="#{personaBean.agregarTelefono()}" update="telefonos"/>
 					<p:dataList id="telefonos" value = "#{personaBean.listaTelefonos}" var="tel">
 						<p:inputText value="#{tel.numero}"/>
-						<p:commandLink value="Remover" actionListener="#{personaBean.removerTelefono(tel)}" update="telefonos"/>	
+						<p:commandLink value="Remover" actionListener="#{personaBean.removerTelefono(tel)}" update="telefonos">
+							<p:confirm header="Confirmacion" message="Estas seguro?" icon="ui-icon-alert"/>
+						</p:commandLink>	
 					</p:dataList>
 					
 				</h:panelGrid>
 			</h:panelGrid>
 		</p:dialog>
-
+		
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+			<p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+			<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+		</p:confirmDialog>
+		
 	</h:form>
 
 </body>
