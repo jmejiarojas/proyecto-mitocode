@@ -11,7 +11,7 @@
 <body>
 	<h:form id="frm" enctype="multipart/form-data">
 		<p:commandButton value="Nuevo"
-			onclick="PF('widgetDialogPersona').show();" />
+			oncomplete="PF('widgetDialogPersona').show();" actionListener="#{personaBean.limpiarControles()}" update="dlgPersona" />
 
 		<p:dataTable value="#{personaBean.listaPersonas}" var="persona"
 			styleClass="tablaSinCabecera"

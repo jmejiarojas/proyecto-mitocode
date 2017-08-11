@@ -131,6 +131,17 @@ public class PersonaBean implements Serializable {
 	public void removerTelefono(Telefono tel) {
 		this.listaTelefonos.remove(tel);
 	}
+	
+	public void limpiarControles() {
+		this.persona.setIdPersona(0);
+		this.persona.setNombres(null);
+		this.persona.setApellidos(null);
+		this.persona.setDireccion(null);
+		this.persona.setSexo(null);
+		//this.persona.getFechaNac(null);
+		this.fechaSeleccionada = null;
+		this.listaTelefonos = new ArrayList<>();
+	}
 
 	/**
 	 * getters & setters
