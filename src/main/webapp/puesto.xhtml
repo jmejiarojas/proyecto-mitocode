@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<h:outputStylesheet name="estilos.css" library="css" />
+	<h:outputScript name="calendar.js" library="js" />
+</h:head>
+<body>
+	<h:form id="frm" enctype="multipart/form-data">
+		<p:commandButton value="Nuevo"
+			oncomplete="PF('widgetDialogPuesto').show();"
+			actionListener="#{puestoBean.limpiarControles()}" update="frm:dlgPuesto" />
+
+		<p:dataTable value="#{puestoBean.lstPuestos}" var="puesto"
+			styleClass="tablaSinCabecera"
+			emptyMessage="No hay puestos con el criterio del filtro"
+			widgetVar="puestosTable" rows="10" paginator="true"
+			currentPageReportTemplate="Mostrando {startRecord}-{endRecord} de {totalRecords} registros"
+			paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} ">
+
+			<f:facet name="header">
+				<p:outputPanel>
+					<h:outputText value="Buscar todos los filtros:" />
+					<p:inputText id="globalFilter"
+						onkeyup="PF('puestosTable').filter()" style="width:190px"
+						placeholder="Digite palabra clave" />
+				</p:outputPanel>
+			</f:facet>
+
+			<p:column headerText="Id" filterBy="#{puesto.idPuesto}"
+				filterMatchMode="contains">
+				<p:outputLabel value="#{puesto.idPuesto}" />
+			</p:column>
+
+			<p:column headerText="Nombre" filterBy="#{puesto.nombre}"
+				filterMatchMode="contains">
+				<p:outputLabel value="#{puesto.nombre}" />
+			</p:column>
+
+			<p:column headerText="Salario Base" filterBy="#{puesto.salarioBase}"
+				filterMatchMode="contains">
+				<p:outputLabel value="#{puesto.salarioBase}">
+					<f:convertNumber currencySymbol="$" maxFractionDigits="2"
+						maxIntegerDigits="4" type="currency" />
+				</p:outputLabel>
+			</p:column>
+
+			<p:column>
+				<p:commandLink actionListener="#{puestoBean.seleccionar(puesto)}"
+					oncomplete="PF('widgetDialogPuesto').show();"
+					update="frm:dlgPuesto">
+					<p:graphicImage library="images" name="edit.jpg" />
+				</p:commandLink>
+			</p:column>
+
+		</p:dataTable>
+
+		<p:dialog id="dlgPuesto" widgetVar="widgetDialogPuesto" modal="true"
+			header="Puestos" closable="true" closeOnEscape="true"
+			resizable="false" draggable="true">
+			<h:panelGrid columns="2">
+				<h:panelGrid columns="2">
+					<p:outputLabel value="Nombre" />
+					<p:inputText value="#{puestoBean.puesto.nombre}" />
+
+					<p:outputLabel value="Salario Base" />
+					<p:spinner value="#{puestoBean.puesto.salarioBase}" />
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<p:outputLabel value="Funcion" />
+					<p:inputText value="#{puestoBean.funcion.nombre}" maxlength="9" />
+					<p:outputLabel value="Descripcion" />
+					<p:inputText value="#{puestoBean.funcion.descripcion}"
+						maxlength="30" />
+					<p:commandButton value="Agregar"
+						actionListener="#{puestoBean.agregar()}" update="funciones" />
+
+					<p:dataList id="funciones" value="#{puestoBean.lstFunciones}"
+						var="fun" rows="5" paginator="true" emptyMessage="Sin funciones">
+						<p:outputLabel value="#{fun.nombre}" />
+
+						<p:commandLink value="Remover"
+							actionListener="#{puestoBean.remover(fun)}" update="funciones" />
+					</p:dataList>
+
+				</h:panelGrid>
+			</h:panelGrid>
+			<h:panelGroup layout="block" style="float: right">
+				<p:commandButton value="Aceptar"
+					actionListener="#{puestoBean.operar()}" ajax="false"
+					action="puesto?faces-redirect=true" />
+				<p:commandButton value="Cancelar" immediate="true"
+					onclick="PF('wdlgPuesto').hide();" />
+			</h:panelGroup>
+		</p:dialog>
+
+		<!-- 		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"> -->
+		<!-- 			<p:commandButton value="Si" type="button" -->
+		<!-- 				styleClass="ui-confirmdialog-yes" icon="ui-icon-check" /> -->
+		<!-- 			<p:commandButton value="No" type="button" -->
+		<!-- 				styleClass="ui-confirmdialog-no" icon="ui-icon-close" /> -->
+		<!-- 		</p:confirmDialog> -->
+
+	</h:form>
+
+</body>
+</html>

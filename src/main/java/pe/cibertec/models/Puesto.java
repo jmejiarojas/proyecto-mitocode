@@ -95,4 +95,10 @@ public class Puesto implements Serializable {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "Puesto [idPuesto=" + idPuesto + ", nombre=" + nombre + ", salarioBase=" + salarioBase + ", funciones="
+				+ funciones + "]";
+	}
+
 }

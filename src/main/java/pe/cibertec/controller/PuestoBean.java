@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ViewScoped;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -59,7 +59,7 @@ public class PuestoBean implements Serializable {
 		fun.setNombre(funcion.getNombre());
 		fun.setDescripcion(funcion.getDescripcion());
 		fun.setPuesto(puesto);
-		this.getLstFunciones().add(funcion);
+		this.getLstFunciones().add(fun);
 	}
 	
 	public void seleccionar(Puesto pue) throws Exception {

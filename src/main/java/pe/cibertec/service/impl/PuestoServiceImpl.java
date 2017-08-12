@@ -41,7 +41,7 @@ public class PuestoServiceImpl implements IPuestoService, Serializable {
 
 	@Override
 	public Puesto listarPorId(Puesto puesto) throws Exception {
-		return listarPorId(puesto);
+		return dao.listarPorId(puesto);
 	}
 
 }

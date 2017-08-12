@@ -46,7 +46,7 @@ public class PuestoDAOImpl implements IPuestoDAO, Serializable{
 	public Puesto listarPorId(Puesto puesto) throws Exception {
 		Puesto p = new Puesto();
 		List<Puesto> listado = new ArrayList<>();
-		Query query =  manager.createQuery("From Puesto p where p.idPuesto = ?1");
+		Query query =  manager.createQuery("FROM Puesto p where p.idPuesto = ?1");
 		query.setParameter(1,puesto.getIdPuesto());
 		
 		listado = (List<Puesto>) query.getResultList();
