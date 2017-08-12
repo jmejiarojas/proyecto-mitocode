@@ -1,14 +1,19 @@
 package pe.cibertec.models;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import sun.util.resources.cldr.swc.CalendarData_swc_CD;
 
 @Entity
 @Table(name = "Puesto")
@@ -31,6 +36,10 @@ public class Puesto implements Serializable {
 
 	@Column(name = "salarioBase", nullable = false, columnDefinition = "Decimal(7,2)")
 	private double salarioBase;
+
+	@OneToMany(mappedBy = "puesto", cascade = { CascadeType.PERSIST, CascadeType.MERGE,
+			CascadeType.REMOVE }, fetch = FetchType.LAZY, orphanRemoval = true)
+	private List<Funcion> funciones;
 
 	public int getIdPuesto() {
 		return idPuesto;
@@ -56,6 +65,14 @@ public class Puesto implements Serializable {
 		this.salarioBase = salarioBase;
 	}
 
+	public List<Funcion> getFunciones() {
+		return funciones;
+	}
+
+	public void setFunciones(List<Funcion> funciones) {
+		this.funciones = funciones;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -77,5 +94,5 @@ public class Puesto implements Serializable {
 			return false;
 		return true;
 	}
-	
+
 }

@@ -312,3 +312,21 @@ Paso 4:
 
 Vamos a tener inconvenientes cuando vamos a querer traer los telefonos de la persona, por defecto la instancia de una persona no trae los telefonos porque por defecto la carga es "Lazy Load", asi que en el mapeo de la Entidad
 Persona configuramos con el valor de "Fetch.EAGER" a fetch."
+
+Paso 5:
+
+Este es un tip para cuando nosotros queremos limpiar los controles de nestra pagina xhtml.
+Lo primero que tenemos que hacer es crear un metodo "limpiarControles" en nuestro Bean que nos va a permitir iniciar los valores.
+El segundo paso es agregarle el valor "limpiarControles()" al atributo "actionListener", luego de esto cambiamos
+la forma de mostrar nuestro widgetDialog, ya no lo invocaremos con el atributo "onclick" sino con el atributo
+"oncomplete".
+
+Paso 6:
+
+OJO: No se puede tener mas de un FetchType.EAGER en la aplicacion cuando trabajamos con JPA.
+Lo que hace EAGER es cargarme todos los hijos en mejoria para luego cargarlos al padre. Todo esto  es un proceso
+pesadaso.
+Pero cuando usamos la aplicacion especicifica de Hibernate o de otros ORM's la historia es distinta.
+Entonces cuando nosotros configuramos a FetchType.LAZY lo que decimos es que cargarmos solo los datos del padre pero
+la lista hija no las va a cargar hasta que yo lo indique, y ya vemos si le decimos los primeros elementos, todos de
+golpe, etc.
