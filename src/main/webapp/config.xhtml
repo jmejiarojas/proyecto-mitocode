@@ -8,6 +8,12 @@
 	<h:outputStylesheet name="estilos.css" library="css" />
 </h:head>
 <body>
+
+	<p:ajaxStatus onstart="PF('wdlgCargando').show();" onsuccess="PF('wdlgCargando').hide();"/>
+	<p:dialog widgetVar="wdlgCargando" modal="true" draggable="false" closable="false" resizable="false" closeOnEscape="false" showHeader="false">
+		<p:graphicImage library="images" name="loading-bar.gif" />
+	</p:dialog>
+	
 	<h:form id="frm" enctype="multipart/form-data">
 		<p:commandButton value="Nuevo"
 			oncomplete="PF('widgetDialogConfig').show();"
@@ -68,10 +74,11 @@
 				</h:panelGrid>
 
 			</h:panelGrid>
+			
 			<h:panelGroup layout="block" style="float: right">
 				<p:commandButton value="Aceptar"
 					actionListener="#{configBean.operar()}" ajax="false"
-					action="config?faces-redirect=true" />
+					action="config?faces-redirect=true" onclick="PF('wdlgCargando').show();"/>
 				<p:commandButton value="Cancelar" immediate="true"
 					onclick="PF('widgetDialogConfig').hide();" />
 			</h:panelGroup>
