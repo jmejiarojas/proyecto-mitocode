@@ -88,4 +88,10 @@ public class Funcion implements Serializable {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "Funcion [idFuncion=" + idFuncion + ", puesto=" + puesto + ", nombre=" + nombre + ", descripcion="
+				+ descripcion + "]";
+	}
+
 }

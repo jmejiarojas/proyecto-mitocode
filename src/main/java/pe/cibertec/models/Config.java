@@ -21,7 +21,7 @@ public class Config implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private byte idConfig; // Me soporta 127 numeros, es lo optimo para este caso
+	private short idConfig; // La unidad minimia para enteros en JPA es short
 
 	@Column(name = "clave", length = 50, nullable = false)
 	private String clave;
@@ -29,11 +29,11 @@ public class Config implements Serializable {
 	@Column(name = "valor", length = 100, nullable = false)
 	private String valor;
 
-	public byte getIdConfig() {
+	public short getIdConfig() {
 		return idConfig;
 	}
 
-	public void setIdConfig(byte idConfig) {
+	public void setIdConfig(short idConfig) {
 		this.idConfig = idConfig;
 	}
 
@@ -51,6 +51,11 @@ public class Config implements Serializable {
 
 	public void setValor(String valor) {
 		this.valor = valor;
+	}
+
+	@Override
+	public String toString() {
+		return "Config [idConfig=" + idConfig + ", clave=" + clave + ", valor=" + valor + "]";
 	}
 
 }

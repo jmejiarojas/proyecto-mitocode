@@ -12,28 +12,28 @@ import javax.persistence.Table;
 @Entity
 @IdClass(ContratoPK.class)
 @Table(name = "contrato")
-public class Contrato implements Serializable{
+public class Contrato implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	private int idContrato;
-	
+
 	@Id
 	private Persona persona;
-	
+
 	@Id
 	private Puesto puesto;
-	
+
 	@Column(name = "fechaInicio", nullable = false)
 	private LocalDate fechaInicio;
-	
+
 	@Column(name = "fechaFin", nullable = false)
 	private LocalDate fechaFin;
-	
+
 	@Column(name = "salario", columnDefinition = "Decimal(7,2)", nullable = false)
 	private double salario;
 
@@ -84,5 +84,11 @@ public class Contrato implements Serializable{
 	public void setSalario(double salario) {
 		this.salario = salario;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Contrato [idContrato=" + idContrato + ", persona=" + persona + ", puesto=" + puesto + ", fechaInicio="
+				+ fechaInicio + ", fechaFin=" + fechaFin + ", salario=" + salario + "]";
+	}
+
 }

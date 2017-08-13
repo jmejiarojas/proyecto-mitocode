@@ -2,6 +2,7 @@ package pe.cibertec.models;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -147,4 +148,11 @@ public class Persona implements Serializable {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "Persona [idPersona=" + idPersona + ", nombres=" + nombres + ", apellidos=" + apellidos + ", sexo="
+				+ sexo + ", direccion=" + direccion + ", telefonos=" + telefonos + "]";
+	}
+
 }
