@@ -44,6 +44,7 @@ public class ConfigBean implements Serializable {
 	}
 	
 	public void seleccionar(Config con) throws Exception{
+		Thread.sleep(3000); //Para probar el ajaxStatus de PrimeFaces
 		config = configService.listarPorId(con);
 	}
 	
