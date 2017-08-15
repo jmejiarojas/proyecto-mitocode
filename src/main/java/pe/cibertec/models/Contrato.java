@@ -37,6 +37,9 @@ public class Contrato implements Serializable {
 	@Column(name = "salario", columnDefinition = "Decimal(7,2)", nullable = false)
 	private double salario;
 
+	@Column(name = "estado", columnDefinition = "char(1)", nullable = false)
+	private String estado = "1";
+
 	public int getIdContrato() {
 		return idContrato;
 	}
@@ -83,6 +86,14 @@ public class Contrato implements Serializable {
 
 	public void setSalario(double salario) {
 		this.salario = salario;
+	}
+
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
 	}
 
 	@Override
