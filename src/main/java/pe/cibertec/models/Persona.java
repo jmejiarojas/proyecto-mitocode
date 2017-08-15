@@ -49,9 +49,9 @@ public class Persona implements Serializable {
 	@OneToMany(mappedBy = "persona", cascade = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.REMOVE }, fetch = FetchType.EAGER, orphanRemoval = true)
 	private List<Telefono> telefonos;
-
+	
 	@Transient
-	private String campoAuxiliar;
+	private String nombreCompleto;
 
 	/**
 	 * getters & setters
@@ -121,6 +121,13 @@ public class Persona implements Serializable {
 
 	public void setTelefonos(List<Telefono> telefonos) {
 		this.telefonos = telefonos;
+	}
+	
+	public String getNombreCompleto() {
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append(nombres).append(", ").append(apellidos);	
+		return sb.toString();
 	}
 
 	/**
