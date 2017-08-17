@@ -2,12 +2,15 @@ package pe.cibertec.models;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @IdClass(ContratoPK.class)
@@ -28,11 +31,13 @@ public class Contrato implements Serializable {
 	@Id
 	private Puesto puesto;
 
+	@Temporal(TemporalType.DATE)
 	@Column(name = "fechaInicio", nullable = false)
-	private LocalDate fechaInicio;
+	private Date fechaInicio;
 
+	@Temporal(TemporalType.DATE)
 	@Column(name = "fechaFin", nullable = false)
-	private LocalDate fechaFin;
+	private Date fechaFin;
 
 	@Column(name = "salario", columnDefinition = "Decimal(7,2)", nullable = false)
 	private double salario;
@@ -64,19 +69,19 @@ public class Contrato implements Serializable {
 		this.puesto = puesto;
 	}
 
-	public LocalDate getFechaInicio() {
+	public Date getFechaInicio() {
 		return fechaInicio;
 	}
 
-	public void setFechaInicio(LocalDate fechaInicio) {
+	public void setFechaInicio(Date fechaInicio) {
 		this.fechaInicio = fechaInicio;
 	}
 
-	public LocalDate getFechaFin() {
+	public Date getFechaFin() {
 		return fechaFin;
 	}
 
-	public void setFechaFin(LocalDate fechaFin) {
+	public void setFechaFin(Date fechaFin) {
 		this.fechaFin = fechaFin;
 	}
 
