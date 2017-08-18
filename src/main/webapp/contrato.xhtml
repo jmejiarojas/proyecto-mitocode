@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Lista de Contratos</title>
+</h:head>
+
+<h:body>
+
+	<h:form id="frm">
+		<p:selectOneMenu value="#{contratoBean.persona}" converter="omnifaces.SelectItemsConverter">
+			<f:selectItem itemLabel="--Seleccione--" itemValue="#{null}" noSelectionOption="true"/>
+			<f:selectItems value="#{contratoBean.lstPersonas}" var="per" itemLabel="#{per.nombreCompleto}" itemValue="#{per}"/>
+		</p:selectOneMenu>
+		
+		<p:selectOneMenu value="#{contratoBean.puesto}" converter="omnifaces.SelectItemsConverter">
+			<f:selectItem itemLabel="--Selecccione--" itemValue="#{null}" noSelectionOption="true"/>
+			<f:selectItems value="#{contratoBean.lstPuestos}" var="pue" itemLabel="#{pue.nombre}" itemValue="#{pue}"/>
+		</p:selectOneMenu>
+		
+		<p:outputLabel value="Fecha de Inicio"/>
+		<p:calendar value="#{contratoBean.contrato.fechaInicio}"/>
+		
+		<p:outputLabel value="Fecha de Fin"/>
+		<p:calendar value="#{contratoBean.contrato.fechaFin}"/>
+		
+		<p:outputLabel value="Salario"/>
+		<p:spinner value="#{contratoBean.contrato.salario}"/>
+		
+		<p:commandButton value="Registrar Contrato" actionListener="#{contratoBean.registrar()}"/>
+	</h:form>
+
+</h:body>
+
+</html>
