@@ -44,7 +44,7 @@ public class ContratoDAOImpl implements IContratoDAO, Serializable {
 	@Override
 	public List<Contrato> listar() throws Exception {
 		List<Contrato> listado;
-		Query query = manager.createQuery("FROM Contrato c where c.estado = '1'");
+		Query query = manager.createQuery("FROM Contrato c"); //where c.estado = '1'
 		listado = (List<Contrato>) query.getResultList();
 
 		return listado;

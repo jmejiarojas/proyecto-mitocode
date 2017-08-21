@@ -47,12 +47,15 @@ public class ContratoBean implements Serializable {
 
 	List<Puesto> lstPuestos;
 
+	List<Contrato> lstContratos;
+
 	@PostConstruct
 	public void init() {
 		lstPersonas = new ArrayList<>();
 		lstPuestos = new ArrayList<>();
 		this.listarPersonas();
 		this.listarPuestos();
+		this.listarContratos();
 	}
 
 	public void listarPersonas() {
@@ -73,8 +76,17 @@ public class ContratoBean implements Serializable {
 		}
 	}
 	
+	public void listarContratos() {
+		try {
+			lstContratos = contratoService.listar();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	public void registrar() {
-		
+
 		try {
 			contrato.setIdContrato(contratoService.generarId(persona));
 			contrato.setPersona(persona);
@@ -84,6 +96,24 @@ public class ContratoBean implements Serializable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		this.listarContratos();
+	}
+	
+	public void selecccionar(Contrato con) throws Exception {
+		contrato = contratoService.listarPorId(con);
+		this.persona = contrato.getPersona();
+		this.puesto = contrato.getPuesto();
+	}
+
+	public void limpiarControles() {
+		this.contrato.setSalario(0.0);
+		this.contrato.setPuesto(null);
+		this.contrato.setPersona(null);
+		this.contrato.setFechaInicio(null);
+		this.contrato.setFechaFin(null);
+		this.contrato.setEstado("1");
+		this.persona = null;
+		this.puesto = null;
 	}
 
 	/**
@@ -127,7 +157,15 @@ public class ContratoBean implements Serializable {
 	}
 
 	public void setLstPuestos(List<Puesto> lstPuestos) {
-		this.lstPuestos = lstPuestos;
+
+	}
+
+	public List<Contrato> getLstContratos() {
+		return lstContratos;
+	}
+
+	public void setLstContratos(List<Contrato> lstContratos) {
+		this.lstContratos = lstContratos;
 	}
 
 }

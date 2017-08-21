@@ -11,27 +11,78 @@
 
 <h:body>
 
+	<p:commandButton value="Nuevo" oncomplete="PF('wdlgContrato').show();"
+		actionListener="#{contratoBean.limpiarControles()}"
+		update="frm:dlgContrato" />
+
+	<p:dataTable value="#{contratoBean.lstContratos}" var="con">
+		<p:column headerText="Persona">
+			<p:outputLabel value="#{con.persona.nombreCompleto}" />
+		</p:column>
+		<p:column headerText="Puesto">
+			<p:outputLabel value="#{con.puesto.nombre}" />
+		</p:column>
+		<p:column headerText="Fecha de Inicio">
+			<p:outputLabel value="#{con.fechaInicio}">
+				<f:convertDateTime pattern="dd/MM/yyyy" />
+			</p:outputLabel>
+		</p:column>
+		<p:column headerText="Fecha de Fin">
+			<p:outputLabel value="#{con.fechaFin}">
+				<f:convertDateTime pattern="dd/MM/yyyy" />
+			</p:outputLabel>
+		</p:column>
+		<p:column headerText="Estado">
+			<p:outputLabel value="#{con.estado}">
+			</p:outputLabel>
+		</p:column>
+		<p:column>
+			<p:commandLink actionListener="#{contratoBean.selecccionar(con)}" oncomplete="PF('wdlgContrato').show();" update="frm:dlgContrato">
+				<p:graphicImage library="images" name="edit.jpg"/>
+			</p:commandLink>
+		</p:column>
+	</p:dataTable>
+
 	<h:form id="frm">
-		<p:selectOneMenu value="#{contratoBean.persona}" converter="omnifaces.SelectItemsConverter">
-			<f:selectItem itemLabel="--Seleccione--" itemValue="#{null}" noSelectionOption="true"/>
-			<f:selectItems value="#{contratoBean.lstPersonas}" var="per" itemLabel="#{per.nombreCompleto}" itemValue="#{per}"/>
-		</p:selectOneMenu>
-		
-		<p:selectOneMenu value="#{contratoBean.puesto}" converter="omnifaces.SelectItemsConverter">
-			<f:selectItem itemLabel="--Selecccione--" itemValue="#{null}" noSelectionOption="true"/>
-			<f:selectItems value="#{contratoBean.lstPuestos}" var="pue" itemLabel="#{pue.nombre}" itemValue="#{pue}"/>
-		</p:selectOneMenu>
-		
-		<p:outputLabel value="Fecha de Inicio"/>
-		<p:calendar value="#{contratoBean.contrato.fechaInicio}"/>
-		
-		<p:outputLabel value="Fecha de Fin"/>
-		<p:calendar value="#{contratoBean.contrato.fechaFin}"/>
-		
-		<p:outputLabel value="Salario"/>
-		<p:spinner value="#{contratoBean.contrato.salario}"/>
-		
-		<p:commandButton value="Registrar Contrato" actionListener="#{contratoBean.registrar()}"/>
+		<p:dialog id="dlgContrato" widgetVar="wdlgContrato" modal="true"
+			closeOnEscape="true" resizable="false">
+			<h:panelGrid columns="2">
+				<p:outputLabel value="Persona"/>
+				<p:selectOneMenu value="#{contratoBean.persona}"
+					converter="omnifaces.SelectItemsConverter">
+					<f:selectItem itemLabel="--Seleccione--" itemValue="#{null}"
+						noSelectionOption="true" />
+					<f:selectItems value="#{contratoBean.lstPersonas}" var="per"
+						itemLabel="#{per.nombreCompleto}" itemValue="#{per}" />
+				</p:selectOneMenu>
+				
+				<p:outputLabel value="Puesto"/>
+				<p:selectOneMenu value="#{contratoBean.puesto}"
+					converter="omnifaces.SelectItemsConverter">
+					<f:selectItem itemLabel="--Selecccione--" itemValue="#{null}"
+						noSelectionOption="true" />
+					<f:selectItems value="#{contratoBean.lstPuestos}" var="pue"
+						itemLabel="#{pue.nombre}" itemValue="#{pue}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Fecha de Inicio" />
+				<p:calendar value="#{contratoBean.contrato.fechaInicio}" />
+
+				<p:outputLabel value="Fecha de Fin" />
+				<p:calendar value="#{contratoBean.contrato.fechaFin}" />
+
+				<p:outputLabel value="Salario" />
+				<p:spinner value="#{contratoBean.contrato.salario}" />
+
+			</h:panelGrid>
+			<h:panelGroup layout="block" style="float:right">
+				<p:commandButton value="Registrar Contrato"
+					actionListener="#{contratoBean.registrar()}" ajax="false"
+					action="contrato?faces-redirect=true" />
+				<p:commandButton value="Cancelar" immediate="true"
+					onclick="PF('wdlgContrato').hide();" />
+			</h:panelGroup>
+		</p:dialog>
 	</h:form>
 
 </h:body>
