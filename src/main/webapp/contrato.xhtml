@@ -34,6 +34,7 @@
 		</p:column>
 		<p:column headerText="Estado">
 			<p:outputLabel value="#{con.estado}">
+				<f:converter converterId="estadoConverter"/>
 			</p:outputLabel>
 		</p:column>
 		<p:column>
