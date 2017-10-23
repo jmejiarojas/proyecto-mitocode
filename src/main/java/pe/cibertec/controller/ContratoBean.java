@@ -51,8 +51,8 @@ public class ContratoBean implements Serializable {
 
 	@PostConstruct
 	public void init() {
-		lstPersonas = new ArrayList<>();
-		lstPuestos = new ArrayList<>();
+		//lstPersonas = new ArrayList<>();
+		//lstPuestos = new ArrayList<>();
 		this.listarPersonas();
 		this.listarPuestos();
 		this.listarContratos();

@@ -26,8 +26,16 @@ public class ContratoDAOImpl implements IContratoDAO, Serializable {
 
 	@Override
 	public void registrar(Contrato contrato) throws Exception {
+		
+		//1 es activo, 0 es Inactivo, se setea 1 por defaul en la Entidad Contrato.
+		
 		manager.persist(contrato);
-
+		
+		/*
+		 * Seteamos el estado a "0" de los contratos de la Persona que se este registrando,
+		 * excepto el contrato que se esta registrando en ese momento.
+		 *
+		 * */
 		Query query = manager.createQuery(
 				"UPDATE Contrato c SET c.estado = '0' WHERE c.persona.idPersona = ?1 AND c.idContrato <> ?2");
 		query.setParameter(1, contrato.getPersona().getIdPersona());

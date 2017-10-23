@@ -1,7 +1,6 @@
 package pe.cibertec.models;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -100,6 +99,8 @@ public class Contrato implements Serializable {
 	public void setEstado(String estado) {
 		this.estado = estado;
 	}
+
+	
 
 	@Override
 	public String toString() {

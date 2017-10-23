@@ -59,6 +59,8 @@ public class ConfigBean implements Serializable {
 	}
 	
 	public void limpiarControles() {
+		short id = 0;
+		this.config.setIdConfig(id);
 		this.config.setClave(null);
 		this.config.setValor(null);
 	}

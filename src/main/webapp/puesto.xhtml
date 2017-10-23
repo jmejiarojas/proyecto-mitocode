@@ -73,10 +73,12 @@
 
 				<h:panelGrid columns="2">
 					<p:outputLabel value="Funcion" />
-					<p:inputText value="#{puestoBean.funcion.nombre}" maxlength="9" />
+					<p:inputText value="#{puestoBean.funcion.nombre}" maxlength="12" />
+					
 					<p:outputLabel value="Descripcion" />
 					<p:inputText value="#{puestoBean.funcion.descripcion}"
 						maxlength="30" />
+						
 					<p:commandButton value="Agregar"
 						actionListener="#{puestoBean.agregar()}" update="funciones" />
 
