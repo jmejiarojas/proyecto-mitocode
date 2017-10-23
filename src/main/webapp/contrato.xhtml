@@ -32,7 +32,7 @@
 				<f:convertDateTime pattern="dd/MM/yyyy" />
 			</p:outputLabel>
 		</p:column>
-		<p:column headerText="Estado">
+		<p:column headerText="Estado" style="width :80px;">
 			<p:outputLabel value="#{con.estado}">
 				<f:converter converterId="estadoConverter"/>
 				<p:graphicImage library="images" name="check.jpg" rendered="#{con.estado eq '1'}"/>
