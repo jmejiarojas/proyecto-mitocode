@@ -9,114 +9,131 @@
 	<h:outputScript name="calendar.js" library="js" />
 </h:head>
 <body>
-	<h:form id="frm" enctype="multipart/form-data">
-		<p:commandButton value="Nuevo"
-			oncomplete="PF('widgetDialogPersona').show();" actionListener="#{personaBean.limpiarControles()}" update="dlgPersona" />
 
-		<p:dataTable value="#{personaBean.listaPersonas}" var="persona"
-			styleClass="tablaSinCabecera"
-			emptyMessage="No hay personas con el criterio del filtro"
-			widgetVar="personasTable" rows="10" paginator="true"
-			currentPageReportTemplate="Mostrando {startRecord}-{endRecord} de {totalRecords} registros"
-			paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} ">
+	<ui:composition template="/WEB-INF/templates/plantilla.xhtml">
 
-			<f:facet name="header">
-				<p:outputPanel>
-					<h:outputText value="Buscar todos los filtros:" />
-					<p:inputText id="globalFilter"
-						onkeyup="PF('personasTable').filter()" style="width:190px"
-						placeholder="Digite palabra clave" />
-				</p:outputPanel>
-			</f:facet>
+		<ui:define name="content">
 
-			<p:column headerText="Id" filterBy="#{persona.idPersona}"
-				filterMatchMode="contains">
-				<p:outputLabel value="#{persona.idPersona}" />
-			</p:column>
-
-			<p:column headerText="Nombres" filterBy="#{persona.nombres}"
-				filterMatchMode="contains">
-				<p:outputLabel value="#{persona.nombres}" />
-			</p:column>
-
-			<p:column headerText="Apellidos" filterBy="#{persona.apellidos}"
-				filterMatchMode="contains">
-				<p:outputLabel value="#{persona.apellidos}" />
-			</p:column>
-
-			<p:column>
-				<p:commandLink actionListener="#{personaBean.seleccionar(persona)}"
+			<h:form id="frm" enctype="multipart/form-data">
+				<p:commandButton value="Nuevo"
 					oncomplete="PF('widgetDialogPersona').show();"
-					update="frm:dlgPersona">
-					<p:graphicImage library="images" name="edit.jpg" />
-				</p:commandLink>
-			</p:column>
+					actionListener="#{personaBean.limpiarControles()}"
+					update="dlgPersona" />
 
-		</p:dataTable>
+				<p:dataTable value="#{personaBean.listaPersonas}" var="persona"
+					styleClass="tablaSinCabecera"
+					emptyMessage="No hay personas con el criterio del filtro"
+					widgetVar="personasTable" rows="10" paginator="true"
+					currentPageReportTemplate="Mostrando {startRecord}-{endRecord} de {totalRecords} registros"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} ">
 
-		<p:dialog id="dlgPersona" widgetVar="widgetDialogPersona" modal="true"
-			header="#{personaBean.titulo}" closable="true" closeOnEscape="true"
-			resizable="false" draggable="true">
-			<h:panelGrid columns="2">
-				<h:panelGrid columns="2">
-					<p:outputLabel value="Nombres" />
-					<p:inputText value="#{personaBean.persona.nombres}" />
+					<f:facet name="header">
+						<p:outputPanel>
+							<h:outputText value="Buscar todos los filtros:" />
+							<p:inputText id="globalFilter"
+								onkeyup="PF('personasTable').filter()" style="width:190px"
+								placeholder="Digite palabra clave" />
+						</p:outputPanel>
+					</f:facet>
 
-					<p:outputLabel value="Apellidos" />
-					<p:inputText value="#{personaBean.persona.apellidos}" />
+					<p:column headerText="Id" filterBy="#{persona.idPersona}"
+						filterMatchMode="contains">
+						<p:outputLabel value="#{persona.idPersona}" />
+					</p:column>
 
-					<p:outputLabel value="Fecha Nacimiento" />
-					<p:calendar value="#{personaBean.fechaSeleccionada}"
-						pattern="dd/MM/yyyy" mask="99/99/9999" locale="es" />
+					<p:column headerText="Nombres" filterBy="#{persona.nombres}"
+						filterMatchMode="contains">
+						<p:outputLabel value="#{persona.nombres}" />
+					</p:column>
 
-					<p:outputLabel value="Sexo" />
-					<p:selectOneRadio value="#{personaBean.persona.sexo}">
-						<f:selectItem itemLabel="M" itemValue="M" />
-						<f:selectItem itemLabel="F" itemValue="F" />
-					</p:selectOneRadio>
+					<p:column headerText="Apellidos" filterBy="#{persona.apellidos}"
+						filterMatchMode="contains">
+						<p:outputLabel value="#{persona.apellidos}" />
+					</p:column>
 
-					<p:outputLabel value="Subir Foto" />
-					<p:fileUpload value="#{personaBean.foto}" mode="simple" />
+					<p:column>
+						<p:commandLink
+							actionListener="#{personaBean.seleccionar(persona)}"
+							oncomplete="PF('widgetDialogPersona').show();"
+							update="frm:dlgPersona">
+							<p:graphicImage library="images" name="edit.jpg" />
+						</p:commandLink>
+					</p:column>
 
-					<p:outputLabel value="Foto"
-						rendered="#{personaBean.persona.idPersona != 0}" />
-					<p:graphicImage value="/imagen/#{personaBean.persona.idPersona}"
-						width="120" height="120"
-						rendered="#{personaBean.persona.idPersona != 0}" />
+				</p:dataTable>
 
-					<p:outputLabel value="Direccion" />
-					<p:inputTextarea value="#{personaBean.persona.direccion}"
-						counter="txtContador" maxlength="150"
-						counterTemplate="{0} caracteres restantes." autoResize="false" />
+				<p:dialog id="dlgPersona" widgetVar="widgetDialogPersona"
+					modal="true" header="#{personaBean.titulo}" closable="true"
+					closeOnEscape="true" resizable="false" draggable="true">
+					<h:panelGrid columns="2">
+						<h:panelGrid columns="2">
+							<p:outputLabel value="Nombres" />
+							<p:inputText value="#{personaBean.persona.nombres}" />
 
-					<h:column />
-					<h:outputText id="txtContador" />
+							<p:outputLabel value="Apellidos" />
+							<p:inputText value="#{personaBean.persona.apellidos}" />
 
-					<p:commandButton actionListener="#{personaBean.operar()}"
-						action="index?faces-redirect=true" ajax="false" value="Aceptar" />
-				</h:panelGrid>
-				<h:panelGrid columns="2">
-					<p:outputLabel value = "Numero"/>
-					<p:inputText value = "#{personaBean.telefono.numero}" maxlength="9"/>
-<!-- 					El comando de debajo actualiza un componente dataList con id "telefonos" -->
-					<p:commandButton value="Agregar" actionListener="#{personaBean.agregarTelefono()}" update="telefonos"/>
-					<p:dataList id="telefonos" value = "#{personaBean.listaTelefonos}" var="tel">
-						<p:inputText value="#{tel.numero}"/>
-						<p:commandLink value="Remover" actionListener="#{personaBean.removerTelefono(tel)}" update="telefonos">
-							<p:confirm header="Confirmacion" message="Estas seguro?" icon="ui-icon-alert"/>
-						</p:commandLink>	
-					</p:dataList>
-					
-				</h:panelGrid>
-			</h:panelGrid>
-		</p:dialog>
-		
-		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-			<p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
-			<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
-		</p:confirmDialog>
-		
-	</h:form>
+							<p:outputLabel value="Fecha Nacimiento" />
+							<p:calendar value="#{personaBean.fechaSeleccionada}"
+								pattern="dd/MM/yyyy" mask="99/99/9999" locale="es" />
 
+							<p:outputLabel value="Sexo" />
+							<p:selectOneRadio value="#{personaBean.persona.sexo}">
+								<f:selectItem itemLabel="M" itemValue="M" />
+								<f:selectItem itemLabel="F" itemValue="F" />
+							</p:selectOneRadio>
+
+							<p:outputLabel value="Subir Foto" />
+							<p:fileUpload value="#{personaBean.foto}" mode="simple" />
+
+							<p:outputLabel value="Foto"
+								rendered="#{personaBean.persona.idPersona != 0}" />
+							<p:graphicImage value="/imagen/#{personaBean.persona.idPersona}"
+								width="120" height="120"
+								rendered="#{personaBean.persona.idPersona != 0}" />
+
+							<p:outputLabel value="Direccion" />
+							<p:inputTextarea value="#{personaBean.persona.direccion}"
+								counter="txtContador" maxlength="150"
+								counterTemplate="{0} caracteres restantes." autoResize="false" />
+
+							<h:column />
+							<h:outputText id="txtContador" />
+
+							<p:commandButton actionListener="#{personaBean.operar()}"
+								action="index?faces-redirect=true" ajax="false" value="Aceptar" />
+						</h:panelGrid>
+						<h:panelGrid columns="2">
+							<p:outputLabel value="Numero" />
+							<p:inputText value="#{personaBean.telefono.numero}" maxlength="9" />
+							<!-- 					El comando de debajo actualiza un componente dataList con id "telefonos" -->
+							<p:commandButton value="Agregar"
+								actionListener="#{personaBean.agregarTelefono()}"
+								update="telefonos" />
+							<p:dataList id="telefonos" value="#{personaBean.listaTelefonos}"
+								var="tel">
+								<p:inputText value="#{tel.numero}" />
+								<p:commandLink value="Remover"
+									actionListener="#{personaBean.removerTelefono(tel)}"
+									update="telefonos">
+									<p:confirm header="Confirmacion" message="Estas seguro?"
+										icon="ui-icon-alert" />
+								</p:commandLink>
+							</p:dataList>
+
+						</h:panelGrid>
+					</h:panelGrid>
+				</p:dialog>
+
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+					<p:commandButton value="Si" type="button"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="No" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+
+			</h:form>
+		</ui:define>
+	</ui:composition>
 </body>
 </html>
