@@ -21,7 +21,6 @@
 					update="dlgPersona" />
 
 				<p:dataTable value="#{personaBean.listaPersonas}" var="persona"
-					styleClass="tablaSinCabecera"
 					emptyMessage="No hay personas con el criterio del filtro"
 					widgetVar="personasTable" rows="10" paginator="true"
 					currentPageReportTemplate="Mostrando {startRecord}-{endRecord} de {totalRecords} registros"
@@ -37,17 +36,17 @@
 					</f:facet>
 
 					<p:column headerText="Id" filterBy="#{persona.idPersona}"
-						filterMatchMode="contains">
+						filterMatchMode="contains" filterStyle="display:none;">
 						<p:outputLabel value="#{persona.idPersona}" />
 					</p:column>
 
 					<p:column headerText="Nombres" filterBy="#{persona.nombres}"
-						filterMatchMode="contains">
+						filterMatchMode="contains" filterStyle="display:none;">
 						<p:outputLabel value="#{persona.nombres}" />
 					</p:column>
 
 					<p:column headerText="Apellidos" filterBy="#{persona.apellidos}"
-						filterMatchMode="contains">
+						filterMatchMode="contains" filterStyle="display:none;">
 						<p:outputLabel value="#{persona.apellidos}" />
 					</p:column>
 

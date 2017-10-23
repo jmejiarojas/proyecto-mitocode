@@ -409,6 +409,37 @@ Y le agregamos esa clase al "body" de la plantila <body class="resolucion">
 
 OJO: Con Ctrl + F5 limpias la cache. Debemos hacer esto para que actualice los valores del CSS.
 
+Paso 8) Agregando iconos al menu de la plantilla
+
+	<ui:insert name="header">
+    
+    	<h:form id="frmMenu">
+    		<p:menubar autoDisplay="false">
+    			<p:menuitem icon="ui-icon-home" value="Inicio" action="index?faces-redirect=true"/>
+    			<p:menuitem icon="ui-icon-person" value="Puestos" action="puesto?faces-redirect=true"/>
+    			<p:menuitem icon="ui-icon-document" value="Contrato" action="contrato?faces-redirect=true"/>
+    		</p:menubar>
+    	</h:form>
+
+	</ui:insert>
+
+Este es el enlace con todos los iconos de primefaces:
+
+Link: http://www.petefreitag.com/cheatsheets/jqueryui-icons/
+
+Se puede agregar una libreria adicional para soportar iconos de Font Awesome "fa-x".
+
+
+
+
+
+
+
+
+
+
+
+
 Snippets de todo el proyecto
 
 1)En el index.xhtml se ha trabajado en la persistencia de datos con Persona y Telefono, como sabemos una person puede tener muchos
