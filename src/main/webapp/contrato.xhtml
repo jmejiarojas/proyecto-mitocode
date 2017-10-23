@@ -35,6 +35,8 @@
 		<p:column headerText="Estado">
 			<p:outputLabel value="#{con.estado}">
 				<f:converter converterId="estadoConverter"/>
+				<p:graphicImage library="images" name="check.jpg" rendered="#{con.estado eq '1'}"/>
+				<p:graphicImage library="images" name="close.png" rendered="#{con.estado eq '0'}"/>
 			</p:outputLabel>
 		</p:column>
 		<p:column>
