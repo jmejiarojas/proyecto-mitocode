@@ -315,7 +315,7 @@ Persona configuramos con el valor de "Fetch.EAGER" a fetch."
 
 Paso 5:
 
-Este es un tip para cuando nosotros queremos limpiar los controles de nestra pagina xhtml.
+Este es un tip para cuando nosotros queremos limpiar los controles de nuestra pagina xhtml.
 Lo primero que tenemos que hacer es crear un metodo "limpiarControles" en nuestro Bean que nos va a permitir iniciar los valores.
 El segundo paso es agregarle el valor "limpiarControles()" al atributo "actionListener", luego de esto cambiamos
 la forma de mostrar nuestro widgetDialog, ya no lo invocaremos con el atributo "onclick" sino con el atributo
@@ -330,3 +330,290 @@ Pero cuando usamos la aplicacion especicifica de Hibernate o de otros ORM's la h
 Entonces cuando nosotros configuramos a FetchType.LAZY lo que decimos es que cargarmos solo los datos del padre pero
 la lista hija no las va a cargar hasta que yo lo indique, y ya vemos si le decimos los primeros elementos, todos de
 golpe, etc.
+
+
+
+
+
+
+
+
+
+
+Snippets de todo el proyecto
+
+1)En el index.xhtml se ha trabajado en la persistencia de datos con Persona y Telefono, como sabemos una person puede tener muchos
+telefonos. Lo que hicimos es lo siguiente:
+	
+	Persona.java
+	
+	@OneToMany(mappedBy = "persona", cascade = { CascadeType.PERSIST, CascadeType.MERGE,
+			CascadeType.REMOVE }, fetch = FetchType.EAGER, orphanRemoval = true)
+	private List<Telefono> telefonos;
+	
+	Telefono.java
+	
+	@ManyToOne
+	@JoinColumn(name = "idPersona", nullable = false) // Indicamos el campo en la otra tabla que permite la relacion
+	private Persona persona;
+	
+Es decir lo trabajamos con fetch.EAGER(ansioso), en castellano esto quiere decir que cuando traigamos la data de Persona, esta data
+vendra incluida con el listado de Telefonos para cada Persona.
+
+2)Por otro lado en puesto.xhtml hemos usado la relacion de Puesto y Funcion, como sabemos un Puesto puede tener muchas funciones, 
+pero para el proyecto lo hemos trabajado de forma "LAZY".
+
+	Puesto.java
+	
+	@OneToMany(mappedBy = "puesto", cascade = { CascadeType.PERSIST, CascadeType.MERGE,
+				CascadeType.REMOVE }, fetch = FetchType.LAZY, orphanRemoval = true)
+		private List<Funcion> funciones;
+
+	Funcion.java
+
+	@ManyToOne
+	@JoinColumn(name = "idPuesto", nullable = false)
+	private Puesto puesto;
+
+Entonces para el caso de si yo quiero traer el listado de Funciones lo tengo que hacer de forma manual, teniendo como parametro
+el puesto del cual quiero obtener las funciones:
+
+public List<Funcion> listar(Puesto puesto) throws Exception {
+		
+	Funcion.java
+		
+	@Override
+	public List<Funcion> listar(Puesto puesto) throws Exception {
+		
+		List<Funcion> funciones = null;
+		Query query = manager.createQuery("FROM Funcion f where f.puesto.idPuesto = ?1");
+
+		query.setParameter(1, puesto.getIdPuesto());
+		funciones = (List<Funcion>)query.getResultList();
+
+		return funciones;
+	}
+
+
+3) Si queremos ver como trabajamos con "gifs" que nos avisen cuando haya un procesamiento ajax y no ajax, eso lo podemos
+apreciar dentro de "config.xhtml" y su respectivo ManagedBean.
+
+4) Obs: Cuando le damos clicl para actualizar una fila de la tabla y luego la cerramos con la "x" en la parte superior derecha,
+lo que pasa es que en memoria queda la data de la persona. Luego cuando vamos a dar "Nuevo registro", en el metodo
+"limpiarControles()" debemos de limpiar todos los atributos de la "persona" o de cualquier entidad, pero sobretodo limpiar el
+atributo de llave primaria que es en el meotodo "operar" que se evalua esa variable para registra o actualizar un registro.
+
+5)Tenemos nuestra entidad Contrato, el cual sus atributos son Persona, Puesto y otros datos de tipo primitivo.
+
+Puesto y Persona se eligiran de la vista mediante:
+
+	<p:selectOneMenu>
+		<f:selectItem itemLabel="--Seleccione--" itemValue="#{null}" noSelectionOption="true"/>
+		<f:selectItems value="#{contratoBean.lstPuestos}" var="pue" itemLabel="#{pue.nombre}" itemValue="#{pue.idPuesto}"/>
+	</p:selectOneMenu>
+
+, si lo hacemos de la forma normal, nosotros estariamos
+capturando solo el idPersona y idPuesto y lo que se busca es capturar todo el objeto para poder setearlo a Contrato de la siguiente forma:
+
+
+
+	public void registrar() {
+		try {
+			contrato.setIdContrato(contratoService.generarId(persona));
+			contrato.setPersona(persona);
+			contrato.setPuesto(puesto);
+			contratoService.registrar(contrato);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.listarContratos();
+	}
+
+Entonces para que se pueda realizar ese escenario lo que podemos hacer es usar "omnifaces".
+Debemos chekar que en nuestro pom tengamos la dependencia de "omnifaces".
+
+El codigo final en la vista quedaria asi:
+
+	<p:outputLabel value="Puesto"/>
+	<p:selectOneMenu value="#{contratoBean.puesto}" converter="omnifaces.SelectItemsConverter">
+		<f:selectItem itemLabel="--Selecccione--" itemValue="#{null}" noSelectionOption="true" />
+		<f:selectItems value="#{contratoBean.lstPuestos}" var="pue" itemLabel="#{pue.nombre}" itemValue="#{pue}" />
+	</p:selectOneMenu>
+
+Como vemos en el itemValue del "f:selectItem" le pasamos todo el objeto y ya no "obj.getId()".
+
+Si no hiciera eso en el managedBean tendria que recibir los "ids" y luego buscar la entidad a la que pertenece para luego
+setearlo al momento de registrar un Contrato.
+
+6) Cuando no encargamos que JPA genere la llave primaria de mi entidad, en este caso puntual es de la entidad
+Contrato que tiene su propia clase Embedable ContratoPK con llaveCompuesta de 3 llaves, lo cual se procede de la siguiente manera,
+debemos tener un mecanismo para generar mi llave primaria. Las lineas de debajo me trae el maximo "idContrato" de la persona a la
+que pertenece el contrato en la lista de contratos anteriores.
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public synchronized int generarId(Persona persona) {
+		int id = 0;
+		List<Contrato> lista = new ArrayList<>();
+		Query query = manager.createQuery("FROM Contrato c where c.persona.idPersona = ?1");
+		query.setParameter(1, persona.getIdPersona());
+
+		lista = (List<Contrato>) query.getResultList();
+
+		if (lista != null && !lista.isEmpty()) {
+			id = lista.get(0).getIdContrato() + 1;
+		} else {
+			id = 1;
+		}
+
+		return id;
+	}
+
+Como vemos con el codigo de arriba obtenemos el ultimo codigo del contrato y le aumentamos en uno, pero debemos estar atento
+a la concurrencia ya que puede estar registrando un contrato a la vez y esto podría generar un error, es por es que le
+colocamos al metodo la palabra reservada "synchronized".
+
+
+7) En el requerimiento del Proyecto se dice que cuando digamos al trabajador "Jose" se le genera un nuevo contrato, 
+el resto de sus contratos anteriores quedan con un estado de "0" y el actual si es "1", por default es "1" segun la definicion
+que hicimos en la misma Entidad "Contrato".
+
+	public void registrar(Contrato contrato) throws Exception {
+		
+		//1 es activo, 0 es Inactivo, se setea 1 por defaul en la Entidad Contrato.
+		
+		manager.persist(contrato);
+		
+		/*
+		 * Seteamos el estado a "0" de los contratos de la Persona que se este registrando,
+		 * excepto el contrato que se esta registrando en ese momento.
+		 *
+		 * */
+		Query query = manager.createQuery(
+				"UPDATE Contrato c SET c.estado = '0' WHERE c.persona.idPersona = ?1 AND c.idContrato <> ?2");
+		query.setParameter(1, contrato.getPersona().getIdPersona());
+		query.setParameter(2, contrato.getIdContrato());
+		query.executeUpdate();
+	}
+
+8) A diferencia de la Entidad Persona que la fechaNac la trabajamos con la api LocalDate de java8, en la entidad Contrato
+hemos trabajado los campos fecha con "Date". Entonces la manera de trabajarlo en JPA sería:
+
+	Contrato.java
+
+	@Temporal(TemporalType.DATE)
+	@Column(name = "fechaInicio", nullable = false)
+	private Date fechaInicio;
+
+	@Temporal(TemporalType.DATE)
+	@Column(name = "fechaFin", nullable = false)
+	private Date fechaFin; 
+
+	contrato.xhtml
+	
+	<p:outputLabel value="Fecha de Inicio" />
+	<p:calendar value="#{contratoBean.contrato.fechaInicio}" />
+
+	<p:outputLabel value="Fecha de Fin" />
+	<p:calendar value="#{contratoBean.contrato.fechaFin}" />
+	
+	ContratoBean.java
+	
+	public void registrar() {
+
+		try {
+			contrato.setIdContrato(contratoService.generarId(persona));
+			contrato.setPersona(persona);
+			contrato.setPuesto(puesto);
+			contratoService.registrar(contrato);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.listarContratos();
+	}
+
+Como podemos apreciar en el ManagedBean no se hace ningun paso extra, ya que el "p:calendar" reconoce los tipos "Date".
+
+9) Trabajar con Converters:
+
+Se recomienda un "converter" para cada cosa en particular.
+
+Por ejemplo en la Tabla contrato tenemos contratos que estan activos e Inactivos, y queremos mostrar en el datatable 
+no su numero de estado(0 y 1), sino una palabra relacionada a su descripcion. Para hacer eso se genera un converter.
+Otra salida es usar "Transient" de JPA como ya vimos con "nombreCompleto" de la entidad Persona.
+
+	EstadoConverter.java
+	
+	package pe.cibertec.converter;
+	
+	import javax.faces.component.UIComponent;
+	import javax.faces.context.FacesContext;
+	import javax.faces.convert.Converter;
+	import javax.faces.convert.FacesConverter;
+	
+	@FacesConverter("estadoConverter")
+	public class EstadoConverter implements Converter {
+
+	@Override
+	public Object getAsObject(FacesContext context, UIComponent component, String value) {
+		return value;
+	}
+
+	@Override
+	public String getAsString(FacesContext context, UIComponent component, Object value) {
+		
+		String tipo = "";
+		
+		if(value != null) {
+			tipo = String.valueOf(value);
+			switch (tipo) {
+			case "1":
+				tipo = "Activo";
+				break;
+			case "0":
+				tipo = "INACTIVO";
+				break;
+			default:
+				tipo = "NO VALIDO";
+				break;
+			}
+		}
+		return tipo;
+	}
+
+	}
+
+Como vemos en el codigo tipo = String.valueOf(value) estamos casteando para poder analizar el tipo "0" o "1".
+	
+La manera mas simple de implementar un Converter es como esta en la parte superior.
+Del codigo arriba tenemos los metodos sobreescritos "getAsObject()" que es el metodo a evaluar y el metodo "getAsString()" es el elemento
+vamos a devolver al usuario. 
+	
+	contrato.xhtml
+	
+	<p:column headerText="Estado">
+		<p:outputLabel value="#{con.estado}">
+			<f:converter converterId="estadoConverter"/>
+		</p:outputLabel>
+	</p:column>
+	
+10) Si queremos mostrar en nuestro datatable un campo que es de tipo Date con una mascara personalizada usaremos:
+
+
+
+	<p:column headerText="Fecha de Inicio">
+		<p:outputLabel value="#{con.fechaInicio}">
+			<f:convertDateTime pattern="dd/MM/yyyy" />
+		</p:outputLabel>
+	</p:column>
+
+
+
+
+
+
+
+
+
