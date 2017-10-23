@@ -14,7 +14,9 @@
 <body class="resolucion">
 
 	<ui:insert name="header">
-    
+    	
+    	<f:loadBundle basename="mensajes" var="msg"/>
+    	
     	<h:form id="frmMenu">
     		<p:menubar autoDisplay="false" style="width: 735px;">
     			<p:menuitem icon="ui-icon-home" value="Inicio" action="index?faces-redirect=true"/>

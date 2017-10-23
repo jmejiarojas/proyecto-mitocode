@@ -786,6 +786,61 @@ Otro detalle es este formato:
 
 Cuando le indicamos lo que esta despues del signo de interrogacion es para que se muestre la url cuando lleguemos a ese page.
 
+14) El tema de "bundles" lo manejamos de esta manera, lo que buscamos es que el mensaje del "datatable" cuando no hay registros
+se carguen de un archivo porperties. Se procede de la siguiente manera:
+
+Lo que se busca hacer es que de un archivo properties con mensajes personalizados, este archivo sera accedido desde una pagina xhtml. Para eso crearemos estos archivos.
+
+* 1:
+
+Dentro de "META-INF" crear un archivo "mensaje-properties" con el siguiente contenido:
+
+     mensaje_vacio = No hay datos que mostrar
+
+* 2:
+
+Dentro de "WEB-INF" crearemos el archivo "faces-config.xml" con el siguiente contenido:
+
+	<?xml version="1.0"?>
+	<faces-config version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
+	
+	<application>
+	<resource-bundle>
+	<base-name>mensajes</base-name>
+	<var>msg</var>
+	</resource-bundle>
+	</application>
+	
+	</faces-config>
+
+Darse cuenta que "base-name" debe coincidir con el nombre de nuestro archivo properties sin su extension "mensajes".
+
+* 3:
+
+Vamos a colocar la referencia a la plantilla para que acceda a todas las paginas hijas.
+
+	<ui:insert name="header">
+
+     	<f:loadBundle basename="mensajes" var="msg"/>
+      .
+      .
+
+	</ui:insert>
+
+* 4:
+
+Y en la vista, en este caso un datatable
+
+	<p:dataTable value="#{personaBean.listaPersonas}" var="persona"
+	emptyMessage="#{msg}"
+	widgetVar="personasTable" rows="10" paginator="true"
+	currentPageReportTemplate="Mostrando {startRecord}-{endRecord} de {totalRecords} registros"
+	paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} ">
+
+Como vemos arriba podemos llamar de frente a esa variable pero desde un archivo properties.
+
 
 
 

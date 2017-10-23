@@ -21,7 +21,7 @@
 					update="dlgPersona" />
 
 				<p:dataTable value="#{personaBean.listaPersonas}" var="persona"
-					emptyMessage="No hay personas con el criterio del filtro"
+					emptyMessage="#{msg.mensaje_vacio}"
 					widgetVar="personasTable" rows="10" paginator="true"
 					currentPageReportTemplate="Mostrando {startRecord}-{endRecord} de {totalRecords} registros"
 					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} ">
