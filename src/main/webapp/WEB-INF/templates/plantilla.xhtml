@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
 <h:head>
 	<title><ui:insert name="title">Gestor de Contratos</ui:insert></title>
 	<h:outputScript name="calendar.js" library="js" />
@@ -15,15 +16,24 @@
 	<ui:insert name="header">
     
     	<h:form id="frmMenu">
-    		<p:menubar autoDisplay="false">
+    		<p:menubar autoDisplay="false" style="width: 735px;">
     			<p:menuitem icon="ui-icon-home" value="Inicio" action="index?faces-redirect=true"/>
     			<p:menuitem icon="ui-icon-person" value="Puestos" action="puesto?faces-redirect=true"/>
     			<p:menuitem icon="ui-icon-document" value="Contrato" action="contrato?faces-redirect=true"/>
+    			
+    			<f:facet name="options">
+    				<p:clock pattern="h:mm:ss a dd/MM/yyyy" mode="server" />
+    			</f:facet>
+    			
     		</p:menubar>
+    		
+    		<p:commandButton icon="ui-icon-gear" action="config?faces-redirect=true" style="height: 42px; float:right; margin-top: -42px; "/>
+    		
     	</h:form>
 
 	</ui:insert>
-
+	
+	<p:separator/>
 
 	<ui:insert name="content">
 

@@ -8,83 +8,91 @@
 	<h:outputStylesheet name="estilos.css" library="css" />
 </h:head>
 <body>
+	<ui:composition template="/WEB-INF/templates/plantilla.xhtml">
 
-	<p:ajaxStatus onstart="PF('wdlgCargando').show();" onsuccess="PF('wdlgCargando').hide();"/>
-	<p:dialog widgetVar="wdlgCargando" modal="true" draggable="false" closable="false" resizable="false" closeOnEscape="false" showHeader="false">
-		<p:graphicImage library="images" name="loading-bar.gif" />
-	</p:dialog>
-	
-	<h:form id="frm" enctype="multipart/form-data">
-		<p:commandButton value="Nuevo"
-			oncomplete="PF('widgetDialogConfig').show();"
-			actionListener="#{configBean.limpiarControles()}" update="frm:dlgConfig" />
+		<ui:define name="content">
+			<p:ajaxStatus onstart="PF('wdlgCargando').show();"
+				onsuccess="PF('wdlgCargando').hide();" />
+			<p:dialog widgetVar="wdlgCargando" modal="true" draggable="false"
+				closable="false" resizable="false" closeOnEscape="false"
+				showHeader="false">
+				<p:graphicImage library="images" name="loading-bar.gif" />
+			</p:dialog>
 
-		<p:dataTable value="#{configBean.lstConfigs}" var="config"
-			styleClass="tablaSinCabecera"
-			emptyMessage="No hay configs con el criterio del filtro"
-			widgetVar="puestosTable" rows="10" paginator="true"
-			currentPageReportTemplate="Mostrando {startRecord}-{endRecord} de {totalRecords} registros"
-			paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} ">
-
-			<f:facet name="header">
-				<p:outputPanel>
-					<h:outputText value="Buscar todos los filtros:" />
-					<p:inputText id="globalFilter"
-						onkeyup="PF('puestosTable').filter()" style="width:190px"
-						placeholder="Digite palabra clave" />
-				</p:outputPanel>
-			</f:facet>
-
-			<p:column headerText="Id" filterBy="#{config.idConfig}"
-				filterMatchMode="contains">
-				<p:outputLabel value="#{config.idConfig}" />
-			</p:column>
-
-			<p:column headerText="Clave" filterBy="#{config.clave}"
-				filterMatchMode="contains">
-				<p:outputLabel value="#{config.clave}" />
-			</p:column>
-
-			<p:column headerText="Valor" filterBy="#{config.valor}"
-				filterMatchMode="contains">
-				<p:outputLabel value="#{config.valor}"/>
-			</p:column>
-
-			<p:column>
-				<p:commandLink actionListener="#{configBean.seleccionar(config)}"
+			<h:form id="frm" enctype="multipart/form-data">
+				<p:commandButton value="Nuevo"
 					oncomplete="PF('widgetDialogConfig').show();"
-					update="frm:dlgConfig">
-					<p:graphicImage library="images" name="edit.jpg" />
-				</p:commandLink>
-			</p:column>
+					actionListener="#{configBean.limpiarControles()}"
+					update="frm:dlgConfig" />
 
-		</p:dataTable>
+				<p:dataTable value="#{configBean.lstConfigs}" var="config"
+					styleClass="tablaSinCabecera"
+					emptyMessage="No hay configs con el criterio del filtro"
+					widgetVar="puestosTable" rows="10" paginator="true"
+					currentPageReportTemplate="Mostrando {startRecord}-{endRecord} de {totalRecords} registros"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} ">
 
-		<p:dialog id="dlgConfig" widgetVar="widgetDialogConfig" modal="true"
-			header="Configuraciones" closable="true" closeOnEscape="true"
-			resizable="false" draggable="true">
-			<h:panelGrid columns="2">
-				<h:panelGrid columns="2">
-					<p:outputLabel value="Clave" />
-					<p:inputText value="#{configBean.config.clave}" />
+					<f:facet name="header">
+						<p:outputPanel>
+							<h:outputText value="Buscar todos los filtros:" />
+							<p:inputText id="globalFilter"
+								onkeyup="PF('puestosTable').filter()" style="width:190px"
+								placeholder="Digite palabra clave" />
+						</p:outputPanel>
+					</f:facet>
 
-					<p:outputLabel value="Valor" />
-					<p:inputText value="#{configBean.config.valor}" />
+					<p:column headerText="Id" filterBy="#{config.idConfig}"
+						filterMatchMode="contains">
+						<p:outputLabel value="#{config.idConfig}" />
+					</p:column>
 
-				</h:panelGrid>
+					<p:column headerText="Clave" filterBy="#{config.clave}"
+						filterMatchMode="contains">
+						<p:outputLabel value="#{config.clave}" />
+					</p:column>
 
-			</h:panelGrid>
-			
-			<h:panelGroup layout="block" style="float: right">
-				<p:commandButton value="Aceptar"
-					actionListener="#{configBean.operar()}" ajax="false"
-					action="config?faces-redirect=true" onclick="PF('wdlgCargando').show();"/>
-				<p:commandButton value="Cancelar" immediate="true"
-					onclick="PF('widgetDialogConfig').hide();" />
-			</h:panelGroup>
-		</p:dialog>
+					<p:column headerText="Valor" filterBy="#{config.valor}"
+						filterMatchMode="contains">
+						<p:outputLabel value="#{config.valor}" />
+					</p:column>
 
-	</h:form>
+					<p:column>
+						<p:commandLink actionListener="#{configBean.seleccionar(config)}"
+							oncomplete="PF('widgetDialogConfig').show();"
+							update="frm:dlgConfig">
+							<p:graphicImage library="images" name="edit.jpg" />
+						</p:commandLink>
+					</p:column>
 
+				</p:dataTable>
+
+				<p:dialog id="dlgConfig" widgetVar="widgetDialogConfig" modal="true"
+					header="Configuraciones" closable="true" closeOnEscape="true"
+					resizable="false" draggable="true">
+					<h:panelGrid columns="2">
+						<h:panelGrid columns="2">
+							<p:outputLabel value="Clave" />
+							<p:inputText value="#{configBean.config.clave}" />
+
+							<p:outputLabel value="Valor" />
+							<p:inputText value="#{configBean.config.valor}" />
+
+						</h:panelGrid>
+
+					</h:panelGrid>
+
+					<h:panelGroup layout="block" style="float: right">
+						<p:commandButton value="Aceptar"
+							actionListener="#{configBean.operar()}" ajax="false"
+							action="config?faces-redirect=true"
+							onclick="PF('wdlgCargando').show();" />
+						<p:commandButton value="Cancelar" immediate="true"
+							onclick="PF('widgetDialogConfig').hide();" />
+					</h:panelGroup>
+				</p:dialog>
+
+			</h:form>
+		</ui:define>
+	</ui:composition>
 </body>
 </html>
