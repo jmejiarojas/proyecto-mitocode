@@ -332,13 +332,82 @@ la lista hija no las va a cargar hasta que yo lo indique, y ya vemos si le decim
 golpe, etc.
 
 
+Paso 7:
+
+Uso de Templates, se recomienda que se cree una carpeta "templates" dentro de "webapp/WEB-INF".
+Dentro de la carpeta "templates" se creara un archivo con el asistente, damos "new HTML" y eleginos "New Facelet Template",
+y usando este asistente nos generar un scaffolding de nuestro template donde tendresmo que modificar sobretodo la linea 4.
+
+	<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+      
+El namespace "ui" esta usando una version anterior de facelets, debemos cambiarlo por:
+
+	<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+Como nos damos cuenta usamos el de "sun".
+
+De la plantilla generada, debemos darnos cuenta que al header se le anteponga el namespace "h:header",
+si queremos introducir codigo que siempre va a ser estatico, podemos usar el componente p:cache, esto hace que
+el contenido este en memoria cache, asi:
+
+	 <ui:insert name="footer">
+	    	<p:cache>
+	    		<div>Desarrollado en Cibertec</div>
+	    		<div>Derechos reservados - 2017</div>
+	    		<div>
+	    			<a href="#">Facebook</a>
+	    			<a href="#">Youtube</a>
+	    			<a href="#">Twitter</a>
+	    		</div>
+	    	</p:cache>
+	  </ui:insert>
 
 
 
+Ojo: Si hacemos un cambio en este footer no se va a reflejar pues esta en cache, tendriamos que limpiarlo para
+que recien limpie la cache.
 
 
+Para "consumir" el template debemos rodear el "body" de nuestra pagina co la linea de abajo:
+
+	<ui:composition  template="/WEB-INF/templates/plantilla.xhtml"></ui:composition>
+	
+
+Para sobreescribir los "ui:insert" lo hacemos de la siguiente manera:
+
+	<ui:define name="content"></ui:content>
+
+Con la lineas de arriba por ejemplo podemos rodear todo el formulario "form" y este seria el "content" que queremos
+sobreescribir.
 
 
+Se recomienda que la plantilla tenga los archivos css y js, para que las paginas clientes solo llamen a la plantilla:
+
+	<h:head>
+		<title><ui:insert name="title">Gestor de Contratos</ui:insert></title>
+		<h:outputStylesheet name="estilos.css" library="css" />
+		<h:outputScript name="calendar.js" library="js" />
+	</h:head>
+
+O en todo caso en cada cliente, los archivos js deberiamos ponerlos al final de la pagina y obviar lo recomendado arriba que sea
+en el template.
+
+Para cambiar el ancho de nuestra plantilla, agregamos estilos a nuestro archivo "estilos.css"
+
+	.resolucion {
+	width: 800px;
+	margin: 0 auto;
+	}
+
+Y le agregamos esa clase al "body" de la plantila <body class="resolucion">
+
+OJO: Con Ctrl + F5 limpias la cache. Debemos hacer esto para que actualice los valores del CSS.
 
 Snippets de todo el proyecto
 
@@ -608,6 +677,83 @@ vamos a devolver al usuario.
 			<f:convertDateTime pattern="dd/MM/yyyy" />
 		</p:outputLabel>
 	</p:column>
+
+11) Si queremos asignar una imagen segun una cadena, esto lo aplicamos en el datatable de contratos, donde tenemos
+la opcion de '1' o '0' y segun eso podemos evaluar y mostrar con "rendered" que se visualice un graphicImage:
+
+	<p:column headerText="Estado">
+		<p:outputLabel value="#{con.estado}">
+			<f:converter converterId="estadoConverter"/>
+			<p:graphicImage library="images" name="check.jpg" rendered="#{con.estado eq '1'}"/>
+			<p:graphicImage library="images" name="close.png" rendered="#{con.estado eq '0'}"/>
+		</p:outputLabel>
+	</p:column>
+
+
+Si queremos que se aprecie solo el graphicimage y no la palabra "Activo" o lo contrario solo limpiamos.
+
+	
+	<p:column headerText="Estado">
+		<p:outputLabel>
+			<p:graphicImage library="images" name="check.jpg" rendered="#{con.estado eq '1'}"/>
+			<p:graphicImage library="images" name="close.png" rendered="#{con.estado eq '0'}"/>
+		</p:outputLabel>
+	</p:column>
+
+
+12) Si queremos trabajar con mas temas de primefaces debemos tener esta dependencia en nuestro pom.xml
+
+Puedes elegir de esta referncia, los community: https://www.primefaces.org/themes/#tab-community
+
+	<dependency>
+		<groupId>org.primefaces.themes</groupId>
+		<artifactId>all-themes</artifactId>
+		<version>1.0.10</version>
+	</dependency>
+	
+Y en la seccion de repositories, agregar el siguiente repository:
+
+	<repositories>
+		<repository>
+			<id>prime-repo</id>
+			<name>PrimeFaces Maven Repository</name>
+			<url>http://repository.primefaces.org</url>
+			<layout>default</layout>
+		</repository>
+	</repositories>
+
+Ademas de ello debemnos agregar en nuestro archivo "web.xml", lo siguiente:
+
+	<context-param>
+	  	<param-name>primefaces.THEME</param-name>
+	  	<param-value>bootstrap</param-value>
+  	</context-param>
+  	
+Como hemos traido todos los temas, tenemos un listado de varios temas, para el ejemplo hemos agregado el "bootstrap".
+
+Si solo hubieramos traido un tema en particular, sería mas limitado el numero de temas que podemos digitar en "<param-value>"
+
+
+13) Siguiendo con el tema de la plantilla, ahora pondremos un "menu" que se compartira en toda la aplicacion:
+
+	<ui:insert name="header">
+    
+	    	<h:form id="frmMenu">
+	    		<p:menubar autoDisplay="false">
+	    			<p:menuitem value="Inicio" action="index?faces-redirect=true"/>
+	    			<p:menuitem value="Puestos" action="puesto?faces-redirect=true"/>
+	    			<p:menuitem value="Contrato" action="contrato?faces-redirect=true"/>
+	    		</p:menubar>
+	    	</h:form>
+
+	</ui:insert>
+	
+Lo ponemos dentro de un "h:form" pues vamos a hacer peticiones de tipo Get.
+Otro detalle es este formato:
+
+	action="index?faces-redirect=true"
+
+Cuando le indicamos lo que esta despues del signo de interrogacion es para que se muestre la url cuando lleguemos a ese page.
 
 
 

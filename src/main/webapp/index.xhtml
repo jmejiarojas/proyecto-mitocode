@@ -106,7 +106,7 @@
 						<h:panelGrid columns="2">
 							<p:outputLabel value="Numero" />
 							<p:inputText value="#{personaBean.telefono.numero}" maxlength="9" />
-							<!-- 					El comando de debajo actualiza un componente dataList con id "telefonos" -->
+							
 							<p:commandButton value="Agregar"
 								actionListener="#{personaBean.agregarTelefono()}"
 								update="telefonos" />

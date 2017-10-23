@@ -6,15 +6,21 @@
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
 	<title><ui:insert name="title">Gestor de Contratos</ui:insert></title>
-	<h:outputStylesheet name="estilos.css" library="css" />
 	<h:outputScript name="calendar.js" library="js" />
+	<h:outputStylesheet name="estilos.css" library="css" />
 </h:head>
 
-<body>
+<body class="resolucion">
 
 	<ui:insert name="header">
     
-    	Cabecera por defecto
+    	<h:form id="frmMenu">
+    		<p:menubar autoDisplay="false">
+    			<p:menuitem value="Inicio" action="index?faces-redirect=true"/>
+    			<p:menuitem value="Puestos" action="puesto?faces-redirect=true"/>
+    			<p:menuitem value="Contrato" action="contrato?faces-redirect=true"/>
+    		</p:menubar>
+    	</h:form>
 
 	</ui:insert>
 
