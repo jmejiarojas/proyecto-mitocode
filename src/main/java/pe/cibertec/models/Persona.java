@@ -43,7 +43,12 @@ public class Persona implements Serializable {
 
 	@Column(name = "direccion", length = 100, nullable = false)
 	private String direccion;
-
+	
+	/*
+	 * Para que no pueda ser actualizada con un simple merge, se forzara la actualizacion siempre y cuando
+	 * exista una foto.
+	 * */
+	@Column(updatable = false)
 	private byte[] foto;
 
 	@OneToMany(mappedBy = "persona", cascade = { CascadeType.PERSIST, CascadeType.MERGE,

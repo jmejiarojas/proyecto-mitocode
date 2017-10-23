@@ -38,7 +38,15 @@ public class PersonaDAOImpl implements IPersonaDAO, Serializable {
 
 	@Override
 	public void modificar(Persona persona) throws Exception {
-		manager.merge(persona);
+		manager.merge(persona); //Por JPA no esta actualizando la foto
+		
+		//Si es que hay una foto actulizamos la Persona con la nueva foto.
+		if(persona.getFoto() != null && persona.getFoto().length >0){
+			Query query = manager.createQuery("UPDATE Persona SET foto = ?1 WHERE idPersona = ?2");
+			query.setParameter(1, persona.getFoto());
+			query.setParameter(2, persona.getIdPersona());
+			query.executeUpdate();
+		}
 	}
 
 	@Override

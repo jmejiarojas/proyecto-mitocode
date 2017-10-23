@@ -834,7 +834,7 @@ Vamos a colocar la referencia a la plantilla para que acceda a todas las paginas
 Y en la vista, en este caso un datatable
 
 	<p:dataTable value="#{personaBean.listaPersonas}" var="persona"
-	emptyMessage="#{msg}"
+	emptyMessage="#{msg.mensaje_vacio}"
 	widgetVar="personasTable" rows="10" paginator="true"
 	currentPageReportTemplate="Mostrando {startRecord}-{endRecord} de {totalRecords} registros"
 	paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} ">
