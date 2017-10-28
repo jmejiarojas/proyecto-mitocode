@@ -960,6 +960,14 @@ el de ese control y no me salga el efecto de cargando cuando agrego un telefono.
 	<p:commandButton value="Agregar" global="false"
 		actionListener="#{personaBean.agregarTelefono()}"
 		update="telefonos" />
+		
+
+**yyy Hasta este momento el manejo del Dialog esta en un 95%, se ha tratado de mostrar todos los escenarios para que quede perfecto
+pero se llego hasta aca. Se recomienda chekar la pagina "index.xhtml" o "personas.xhtml" en el commit:
+
+	"Add validations feature in persona.xhtml"
+
+Revisar el estaco actual de persona.xhtml en el commit de arriba para usar esa pagina como Plantilla para otros projectos.
 	 
 
 
