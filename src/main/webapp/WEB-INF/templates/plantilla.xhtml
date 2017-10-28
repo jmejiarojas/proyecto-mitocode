@@ -15,6 +15,12 @@
 
 	<ui:insert name="header">
     	
+    	<p:ajaxStatus onstart="PF('wdlgCargando').show()" onsuccess="PF('wdlgCargando').hide()" />
+ 
+		<p:dialog widgetVar="wdlgCargando" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+		    <p:graphicImage library="images" name="cargando.gif" />
+		</p:dialog>
+    	
     	<f:loadBundle basename="mensajes" var="msg"/>
     	
     	<h:form id="frmMenu">

@@ -14,15 +14,26 @@
 
 		<ui:define name="content">
 
+			<h2>Personas</h2>
+
+			<p:messages id="msj" autoUpdate="true" showDetail="true"
+				globalOnly="true" />
+
 			<h:form id="frm" enctype="multipart/form-data">
+
+				<p:hotkey bind="alt+n"
+					oncomplete="PF('widgetDialogPersona').show();" />
+				<p:hotkey bind="alt+a" actionListener="#{personaBean.operar()}"
+					update="dlgPersona, pgPersona" />
+
 				<p:commandButton value="Nuevo"
 					oncomplete="PF('widgetDialogPersona').show();"
 					actionListener="#{personaBean.limpiarControles()}"
 					update="dlgPersona" />
 
 				<p:dataTable value="#{personaBean.listaPersonas}" var="persona"
-					emptyMessage="#{msg.mensaje_vacio}"
-					widgetVar="personasTable" rows="10" paginator="true"
+					emptyMessage="#{msg.mensaje_vacio}" widgetVar="personasTable"
+					rows="10" paginator="true"
 					currentPageReportTemplate="Mostrando {startRecord}-{endRecord} de {totalRecords} registros"
 					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} ">
 
@@ -53,7 +64,7 @@
 					<p:column>
 						<p:commandLink
 							actionListener="#{personaBean.seleccionar(persona)}"
-							oncomplete="PF('widgetDialogPersona').show();"
+							process="@this" oncomplete="PF('widgetDialogPersona').show();"
 							update="frm:dlgPersona">
 							<p:graphicImage library="images" name="edit.jpg" />
 						</p:commandLink>
@@ -62,22 +73,30 @@
 				</p:dataTable>
 
 				<p:dialog id="dlgPersona" widgetVar="widgetDialogPersona"
-					modal="true" header="#{personaBean.titulo}" closable="true"
-					closeOnEscape="true" resizable="false" draggable="true">
-					<h:panelGrid columns="2">
+					modal="true" header="#{personaBean.titulo}" closable="false"
+					resizable="false" draggable="true"
+					visible="#{facesContext.validationFailed}">
+
+					<p:messages id="msjDialog" />
+
+					<h:panelGrid columns="2" id="pgPersona">
 						<h:panelGrid columns="2">
-							<p:outputLabel value="Nombres" />
-							<p:inputText value="#{personaBean.persona.nombres}" />
+							<p:outputLabel for="txtNombres" value="Nombres" />
+							<p:inputText id="txtNombres"
+								value="#{personaBean.persona.nombres}" required="true" />
 
-							<p:outputLabel value="Apellidos" />
-							<p:inputText value="#{personaBean.persona.apellidos}" />
+							<p:outputLabel for="txtApellidos" value="Apellidos" />
+							<p:inputText id="txtApellidos"
+								value="#{personaBean.persona.apellidos}" required="true" />
 
-							<p:outputLabel value="Fecha Nacimiento" />
-							<p:calendar value="#{personaBean.fechaSeleccionada}"
-								pattern="dd/MM/yyyy" mask="99/99/9999" locale="es" />
+							<p:outputLabel value="Fecha Nacimiento" for="calFecha" />
+							<p:calendar id="calFecha"
+								value="#{personaBean.fechaSeleccionada}" pattern="dd/MM/yyyy"
+								mask="99/99/9999" locale="es" required="true" />
 
-							<p:outputLabel value="Sexo" />
-							<p:selectOneRadio value="#{personaBean.persona.sexo}">
+							<p:outputLabel value="Sexo" for="cboSexo" />
+							<p:selectOneRadio id="cboSexo"
+								value="#{personaBean.persona.sexo}" required="true">
 								<f:selectItem itemLabel="M" itemValue="M" />
 								<f:selectItem itemLabel="F" itemValue="F" />
 							</p:selectOneRadio>
@@ -91,27 +110,28 @@
 								width="120" height="120"
 								rendered="#{personaBean.persona.idPersona != 0}" />
 
-							<p:outputLabel value="Direccion" />
-							<p:inputTextarea value="#{personaBean.persona.direccion}"
-								counter="txtContador" maxlength="150"
-								counterTemplate="{0} caracteres restantes." autoResize="false" />
+							<p:outputLabel value="Direccion" for="txtDireccion" />
+							<p:inputTextarea id="txtDireccion"
+								value="#{personaBean.persona.direccion}" counter="txtContador"
+								maxlength="150" counterTemplate="{0} caracteres restantes."
+								autoResize="false" required="true" />
 
 							<h:column />
 							<h:outputText id="txtContador" />
 
-							<p:commandButton actionListener="#{personaBean.operar()}"
-								action="index?faces-redirect=true" ajax="false" value="Aceptar" />
+
 						</h:panelGrid>
 						<h:panelGrid columns="2">
 							<p:outputLabel value="Numero" />
 							<p:inputText value="#{personaBean.telefono.numero}" maxlength="9" />
-							
-							<p:commandButton value="Agregar"
+
+							<p:commandButton value="Agregar" global="false"
 								actionListener="#{personaBean.agregarTelefono()}"
 								update="telefonos" />
+								
 							<p:dataList id="telefonos" value="#{personaBean.listaTelefonos}"
-								var="tel">
-								<p:inputText value="#{tel.numero}" />
+								var="tel" rows="5" paginator="true" emptyMessage="Sin números">
+								<p:outputLabel value="#{tel.numero}" />
 								<p:commandLink value="Remover"
 									actionListener="#{personaBean.removerTelefono(tel)}"
 									update="telefonos">
@@ -122,6 +142,14 @@
 
 						</h:panelGrid>
 					</h:panelGrid>
+
+					<h:panelGroup layout="block" style="float: right">
+						<p:commandButton value="Aceptar" update="dlgPersona, pgPersona"
+							actionListener="#{personaBean.operar()}" ajax="false" />
+						<p:commandButton value="Cancelar" immediate="true"
+							onclick="PF('widgetDialogPersona').hide();" />
+					</h:panelGroup>
+
 				</p:dialog>
 
 				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">

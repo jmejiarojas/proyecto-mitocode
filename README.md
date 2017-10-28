@@ -841,6 +841,126 @@ Y en la vista, en este caso un datatable
 
 Como vemos arriba podemos llamar de frente a esa variable pero desde un archivo properties.
 
+15) MENSAJES DE VALIDACION
+
+* 1 Vamos a empezar mostrando al usuario que campos son requeridos, esto va a hacer que el Dialog se cargue y pinte
+de rojo los labels de los campso requeridos.
+
+Para eso a los inputs le ponemos un "id" y lo amarramos al "for" de los labels, ademas de que cada input esta
+con la propiedad required="true".
+
+	<p:outputLabel for="txtNombres" value="Nombres" />
+							<p:inputText id="txtNombres" value="#{personaBean.persona.nombres}" required="true"/>
+
+*2 El segundo componente que vamos a mostrar es el p:messages, este componente me va a mostrar en la parte superior
+recomendablemente, me va a permitir si ha pasado un mensaje de exito, error u otro que yo defina.
+
+	<p:dialog id="dlgPersona" widgetVar="widgetDialogPersona"
+		modal="true" header="#{personaBean.titulo}" closable="true"
+		closeOnEscape="true" resizable="false" draggable="true">
+		
+		<p:messages id="msjDialog"/>
+		
+		<h:panelGrid columns="2">
+			<h:panelGrid columns="2">
+				<p:outputLabel for="txtNombres" value="Nombres" />
+				<p:inputText id="txtNombres" value="#{personaBean.persona.nombres}" required="true"/>
+
+				<p:outputLabel for="txtApellidos" value="Apellidos" />
+				<p:inputText id="txtApellidos" value="#{personaBean.persona.apellidos}" required="true"/> 
+
+*3 Poco a poco estamos mejorando las validaciones, pero ahora surge un problema, el dialog de personas.xhtml es de ajax="false"
+por el procesamiento de la foto de la persona. Entonces asi como esta hasta el punto *2 lo que sucede es que cuando el usuario
+abre el dialog y digamos que hace una insercion de datos incompleta y luego pulsa el boton "Aceptar" internamente no se registra
+una persona pero el dialog se cierra dando la sensacion para el usuario final que se ha registrado con exito la persona. Cosa curiosa
+es que si en despues de eso abro el Dialog vere las validaciones que faltan "pasar".
+
+Ahora lo que se busca hacer es que cuando el usuario final le de a la opcion "Aceptar" y haya validaciones fallidas rapidamente
+se muestre el dialogo mostrando solo los datos que faltan validar, de esta manera el usuario final se dara cuenta que no se ha registrado la persona. Para esto se agrega al "Dialog" la propiedad de visible="#{facesContext.validationFailed}". En codigo se veria asi:
+
+	<p:dialog id="dlgPersona" widgetVar="widgetDialogPersona"
+		modal="true" header="#{personaBean.titulo}" closable="true"
+		closeOnEscape="true" resizable="false" draggable="true" visible="#{facesContext.validationFailed}">
+		
+		<p:messages id="msjDialog"/>
+		
+		<h:panelGrid columns="2">
+			<h:panelGrid columns="2">
+				<p:outputLabel for="txtNombres" value="Nombres" />
+				<p:inputText id="txtNombres" value="#{personaBean.persona.nombres}" required="true"/> 
+				
+Pero no todo es perfecto, si el usuario pulsa la "x" o presiona la tecla "ESC" se cerrara el dialog y ya no se volvera a mostrar
+dando el mismo problema que el *2. Seguiremos puliendo la aplicacion.
+
+*4 Ahora quiero mostrar mensajes fuera del Dialog, voy a colocar el siguiente codigo sobre la etiqueta form:
+
+	<p:messages id="msj" autoUpdate="true" showDetail="true"/>
+
+Asi como esta el codigo de arriba me va a mostrar los errores de validacion que ha sufrido mi Dialog.
+Lo que yo quiero ahora es que solo me muestre los errores que yo quiero mandale, para eso el codigo debe quedar asi:
+
+	<p:messages id="msj" autoUpdate="true" showDetail="true" globalOnly="true"/>
+
+De esta manera solo me mostrara los mensajes que yo defina en mis ManagedBeans.
+
+*5 Entonces vamos a mostrar de mis Managed Beans mensajes personalizados, para eso creo un utilitario para mensajes:
+	
+	package pe.cibertec.util;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+
+	public class MensajeManager {
+
+		public static final int INFO = 1, WARN = 2, ERROR = 3, FATAL = 4;
+	
+		public synchronized static void mostrarMensaje(String titulo, String cuerpo, int severidad) {
+			switch (severidad) {
+			case INFO:
+				FacesContext.getCurrentInstance().addMessage(null,
+						new FacesMessage(FacesMessage.SEVERITY_INFO, titulo, cuerpo));
+				break;
+			case WARN:
+				FacesContext.getCurrentInstance().addMessage(null,
+						new FacesMessage(FacesMessage.SEVERITY_WARN, titulo, cuerpo));
+				break;
+			case ERROR:
+				FacesContext.getCurrentInstance().addMessage(null,
+						new FacesMessage(FacesMessage.SEVERITY_ERROR, titulo, cuerpo));
+				break;
+			case FATAL:
+				FacesContext.getCurrentInstance().addMessage(null,
+						new FacesMessage(FacesMessage.SEVERITY_FATAL, titulo, cuerpo));
+				break;
+			}
+		}
+	}
+		
+Entonces desde nuestro PersonaBean ya podemos hacer uso de este utilitario:
+
+	//Para modificar la persona
+	if (persona.getIdPersona() > 0) {
+		personaService.modificar(persona);
+		MensajeManager.mostrarMensaje("Aviso", "Se actualizo la persona", MensajeManager.INFO);
+	} else { //Para modificar la persona
+		this.titulo = "Registrar Persona";
+		personaService.registrar(persona);
+		MensajeManager.mostrarMensaje("Aviso", "Se inserto la persona", MensajeManager.INFO);
+	}
+	
+
+**xxx Se me habia pasado y ha de ser por algun cambio que hice en los componentes AJAX, es que el editar Persona
+me mandaba el formulario de registrar y eso era porque el metodo seleccionar(persona) que esta amarrado al commandLink
+recibia a la persona con parametros nulos y es por eso que me mandaba el formulario de "Registrar". La solucion que
+encontre comparando con el codigo de Mitocode fue que faltaba la propiedad process="@this" al commmandLink.
+
+Estas lineas de abajo me hace que el comportamiento de el commandbutton sea ajax=false para que el ajaxstatus no me evalue 
+el de ese control y no me salga el efecto de cargando cuando agrego un telefono.
+
+	<p:commandButton value="Agregar" global="false"
+		actionListener="#{personaBean.agregarTelefono()}"
+		update="telefonos" />
+	 
 
 
 

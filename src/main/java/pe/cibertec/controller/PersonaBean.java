@@ -17,6 +17,7 @@ import org.primefaces.model.UploadedFile;
 import pe.cibertec.models.Persona;
 import pe.cibertec.models.Telefono;
 import pe.cibertec.service.IPersonaService;
+import pe.cibertec.util.MensajeManager;
 
 @Named
 @ViewScoped
@@ -72,6 +73,7 @@ public class PersonaBean implements Serializable {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			MensajeManager.mostrarMensaje("Error", e.getMessage(), MensajeManager.ERROR);
 		}
 	}
 
@@ -96,16 +98,17 @@ public class PersonaBean implements Serializable {
 			//Para modificar la persona
 			if (persona.getIdPersona() > 0) {
 				personaService.modificar(persona);
+				MensajeManager.mostrarMensaje("Aviso", "Se actualizo la persona", MensajeManager.INFO);
 			} else { //Para modificar la persona
 				this.titulo = "Registrar Persona";
 				personaService.registrar(persona);
+				MensajeManager.mostrarMensaje("Aviso", "Se inserto la persona", MensajeManager.INFO);
 			}
 
 			this.listar();
 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			MensajeManager.mostrarMensaje("Error", e.getMessage(), MensajeManager.ERROR);
 		}
 	}
 
@@ -115,6 +118,7 @@ public class PersonaBean implements Serializable {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			MensajeManager.mostrarMensaje("Error", e.getMessage(), MensajeManager.ERROR);
 		}
 	}
 	
@@ -141,6 +145,8 @@ public class PersonaBean implements Serializable {
 		//this.persona.getFechaNac(null);
 		this.fechaSeleccionada = null;
 		this.listaTelefonos = new ArrayList<>();
+		
+		this.titulo = "Agregar Persona";
 	}
 
 	/**

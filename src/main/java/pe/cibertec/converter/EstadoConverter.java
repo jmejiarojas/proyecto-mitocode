@@ -22,7 +22,7 @@ public class EstadoConverter implements Converter {
 			tipo = String.valueOf(value);
 			switch (tipo) {
 			case "1":
-				tipo = "Activo";
+				tipo = "ACTIVO";
 				break;
 			case "0":
 				tipo = "INACTIVO";

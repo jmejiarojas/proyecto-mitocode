@@ -36,7 +36,7 @@
 						<f:convertDateTime pattern="dd/MM/yyyy" />
 					</p:outputLabel>
 				</p:column>
-				<p:column headerText="Estado" style="width :80px;">
+				<p:column headerText="Estado" style="width :120px;">
 					<p:outputLabel value="#{con.estado}">
 						<f:converter converterId="estadoConverter" />
 						<p:graphicImage library="images" name="check.jpg"
@@ -45,7 +45,7 @@
 							rendered="#{con.estado eq '0'}" />
 					</p:outputLabel>
 				</p:column>
-				<p:column>
+				<p:column headerText="Acciones" style="width :80px;">
 					<p:commandLink actionListener="#{contratoBean.selecccionar(con)}"
 						oncomplete="PF('wdlgContrato').show();" update="frm:dlgContrato">
 						<p:graphicImage library="images" name="edit.jpg" />
@@ -55,7 +55,7 @@
 
 			<h:form id="frm">
 				<p:dialog id="dlgContrato" widgetVar="wdlgContrato" modal="true"
-					closeOnEscape="true" resizable="false">
+					closeOnEscape="true" resizable="false" header="Contratos" footer="Gestion de Contratos" closable="false">
 					<h:panelGrid columns="2">
 						<p:outputLabel value="Persona" />
 						<p:selectOneMenu value="#{contratoBean.persona}"
