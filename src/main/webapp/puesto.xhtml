@@ -14,9 +14,7 @@
 		<ui:define name="content">
 			<h:form id="frm" enctype="multipart/form-data">
 				<p:commandButton value="Nuevo"
-					oncomplete="PF('widgetDialogPuesto').show();"
-					actionListener="#{puestoBean.limpiarControles()}"
-					update="frm:dlgPuesto" />
+					action="puestoForm?faces-redirect=true" />
 
 				<p:dataTable value="#{puestoBean.lstPuestos}" var="puesto"
 					styleClass="tablaSinCabecera"
@@ -54,63 +52,13 @@
 
 					<p:column>
 						<p:commandLink actionListener="#{puestoBean.seleccionar(puesto)}"
-							oncomplete="PF('widgetDialogPuesto').show();"
-							update="frm:dlgPuesto">
+							action="puestoForm">
 							<p:graphicImage library="images" name="edit.jpg" />
 						</p:commandLink>
 					</p:column>
 
 				</p:dataTable>
 
-				<p:dialog id="dlgPuesto" widgetVar="widgetDialogPuesto" modal="true"
-					header="Puestos" closable="true" closeOnEscape="true"
-					resizable="false" draggable="true">
-					<h:panelGrid columns="2">
-						<h:panelGrid columns="2">
-							<p:outputLabel value="Nombre" />
-							<p:inputText value="#{puestoBean.puesto.nombre}" />
-
-							<p:outputLabel value="Salario Base" />
-							<p:spinner value="#{puestoBean.puesto.salarioBase}" />
-
-						</h:panelGrid>
-
-						<h:panelGrid columns="2">
-							<p:outputLabel value="Funcion" />
-							<p:inputText value="#{puestoBean.funcion.nombre}" maxlength="12" />
-
-							<p:outputLabel value="Descripcion" />
-							<p:inputText value="#{puestoBean.funcion.descripcion}"
-								maxlength="30" />
-
-							<p:commandButton value="Agregar"
-								actionListener="#{puestoBean.agregar()}" update="funciones" />
-
-							<p:dataList id="funciones" value="#{puestoBean.lstFunciones}"
-								var="fun" rows="5" paginator="true" emptyMessage="Sin funciones">
-								<p:outputLabel value="#{fun.nombre}" />
-
-								<p:commandLink value="Remover"
-									actionListener="#{puestoBean.remover(fun)}" update="funciones" />
-							</p:dataList>
-
-						</h:panelGrid>
-					</h:panelGrid>
-					<h:panelGroup layout="block" style="float: right">
-						<p:commandButton value="Aceptar"
-							actionListener="#{puestoBean.operar()}" ajax="false"
-							action="puesto?faces-redirect=true" />
-						<p:commandButton value="Cancelar" immediate="true"
-							onclick="PF('wdlgPuesto').hide();" />
-					</h:panelGroup>
-				</p:dialog>
-
-				<!-- 		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"> -->
-				<!-- 			<p:commandButton value="Si" type="button" -->
-				<!-- 				styleClass="ui-confirmdialog-yes" icon="ui-icon-check" /> -->
-				<!-- 			<p:commandButton value="No" type="button" -->
-				<!-- 				styleClass="ui-confirmdialog-no" icon="ui-icon-close" /> -->
-				<!-- 		</p:confirmDialog> -->
 
 			</h:form>
 		</ui:define>

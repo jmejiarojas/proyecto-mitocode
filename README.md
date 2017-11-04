@@ -968,6 +968,31 @@ pero se llego hasta aca. Se recomienda chekar la pagina "index.xhtml" o "persona
 	"Add validations feature in persona.xhtml"
 
 Revisar el estaco actual de persona.xhtml en el commit de arriba para usar esa pagina como Plantilla para otros projectos.
+
+*6 OMNIFACES: Es una suite de Funcionalidades
+
+Para pasar parametros de una pagina a otra, lo hemos usado para nuestro CRUD de Puestos, hemos pasado un dato de tipo primitivo
+desde la pagina PuestoBean hacia la pagina PuestoFormBean.
+
+	public void seleccionar(Puesto pue) throws Exception {		
+		//Enviar por OmniFaces
+		Faces.setFlashAttribute("idPuesto", pue.getIdPuesto());
+	}
+
+Y lo recibimos en la otra pagina de esta forma:
+
+	@PostConstruct
+	public void init() {
+		this.lstFunciones = new ArrayList<>();
+		Integer idPuesto = Faces.getFlashAttribute("idPuesto");
+		
+		if(idPuesto != null &&  idPuesto > 0){
+			puesto.setIdPuesto(idPuesto);
+			this.leer(puesto);
+		}
+	}
+
+OJO: Nosotros podemos pasar datos de tipo primitivo como tambien objetos.
 	 
 
 

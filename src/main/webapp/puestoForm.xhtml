@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<h:outputStylesheet name="estilos.css" library="css" />
+	<h:outputScript name="calendar.js" library="js" />
+</h:head>
+<body>
+	<ui:composition template="/WEB-INF/templates/plantilla.xhtml">
+
+		<ui:define name="content">
+
+			<p:messages id="msj" showDetail="false" autoUpdate="true"
+				globalOnly="true" />
+
+			<h:form id="frm" enctype="multipart/form-data">
+				<h2>Detalle del Puesto #{puestoFormBean.puesto.nombre}</h2>
+
+				<h:panelGrid columns="4">
+
+					<p:outputLabel for="txtNombre" value="Nombre" />
+					<p:inputText id="txtNombre" value="#{puestoFormBean.puesto.nombre}" required="true"/>
+					<p:message for="txtNombre" />
+					<p:tooltip for="txtNombre" value="Nombre del Puesto" />
+
+
+					<p:outputLabel for="txtSalarioBase" value="Salario Base" />
+					<p:spinner id="txtSalarioBase"
+						value="#{puestoFormBean.puesto.salarioBase}" required="true"/>
+					<p:message for="txtSalarioBase" />
+					<p:tooltip for="txtSalarioBase" value="Salario Base para el puesto" />
+
+					<p:outputLabel value="Funcion" />
+					<p:inputText id="txtFuncion"
+						value="#{puestoFormBean.funcion.nombre}" maxlength="12"/>
+					<p:tooltip for="txtFuncion"
+						value="Nombre de la Funcion para el puesto" />
+
+
+					<h:column />
+
+					<p:outputLabel value="Descripcion" />
+					<p:inputText id="txtDescripcion"
+						value="#{puestoFormBean.funcion.descripcion}" maxlength="30" />
+					<p:tooltip for="txtDescripcion"
+						value="Descripcion de la funcion para el puesto" />
+
+					<h:column />
+
+					<p:commandButton value="Agregar Funcion"
+						actionListener="#{puestoFormBean.agregar()}" update="funciones" />
+
+					<p:dataList id="funciones" value="#{puestoFormBean.lstFunciones}"
+						var="fun" rows="5" paginator="true" emptyMessage="Sin funciones">
+						<p:outputLabel value="#{fun.nombre}" />
+
+						<p:commandLink value="Remover"
+							actionListener="#{puestoFormBean.remover(fun)}"
+							update="funciones" ajax="false" />
+					</p:dataList>
+
+				</h:panelGrid>
+
+				<p:separator />
+
+				<p:commandButton value="Aceptar" update="@form"
+					actionListener="#{puestoFormBean.operar()}"
+					action="puesto?faces-redirect=true"/>
+				<p:commandButton value="Cancelar" immediate="true"
+					action="puesto?faces-redirect=true" />
+
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</body>
+</html>
