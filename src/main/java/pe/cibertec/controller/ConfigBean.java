@@ -11,6 +11,7 @@ import javax.inject.Named;
 
 import pe.cibertec.models.Config;
 import pe.cibertec.service.IConfigService;
+import pe.cibertec.util.MensajeManager;
 
 @Named
 @ViewScoped
@@ -29,8 +30,11 @@ public class ConfigBean implements Serializable {
 
 	private List<Config> lstConfigs;
 
+	private String accion;
+
 	@PostConstruct
 	public void init() {
+		this.accion = "Registrar";
 		lstConfigs = new ArrayList<>();
 		this.listar();
 	}
@@ -39,37 +43,50 @@ public class ConfigBean implements Serializable {
 		try {
 			lstConfigs = configService.listar();
 		} catch (Exception e) {
-			e.printStackTrace();
+			MensajeManager.mostrarMensaje("Aviso", e.getMessage(), MensajeManager.ERROR);
 		}
 	}
-	
-	public void seleccionar(Config con) throws Exception{
-		Thread.sleep(3000); //Para probar el ajaxStatus de PrimeFaces
+
+	public void seleccionar(Config con) throws Exception {
 		config = configService.listarPorId(con);
+		this.accion = "Modificar";
 	}
-	
-	public void operar() throws Exception{
-		if(config.getIdConfig() > 0) {
-			configService.modificar(config);
-		}else {
-			configService.registrar(config);
-		}
+
+	public void operar() {
 		
-		this.listar();
+		try {
+			if (config.getIdConfig() > 0) {
+				configService.modificar(config);
+				MensajeManager.mostrarMensaje("Aviso", "Modificacion exitosa", MensajeManager.INFO);
+			} else {
+				configService.registrar(config);
+				MensajeManager.mostrarMensaje("Aviso", "Registro exitoso", MensajeManager.INFO);
+			}
+			
+			this.listar();
+		} catch (Exception e) {
+			MensajeManager.mostrarMensaje("Aviso", e.getMessage(), MensajeManager.ERROR);
+		}finally {
+			this.limpiarControles();
+		}
+
+		
 	}
-	
+
 	public void limpiarControles() {
 		short id = 0;
 		this.config.setIdConfig(id);
 		this.config.setClave(null);
 		this.config.setValor(null);
+		this.accion = "Registrar";
 	}
 
 	/**
-	 *  getters & setters
+	 * getters & setters
+	 * 
 	 * @return
 	 */
-	
+
 	public Config getConfig() {
 		return config;
 	}
@@ -84,6 +101,14 @@ public class ConfigBean implements Serializable {
 
 	public void setLstConfigs(List<Config> lstConfigs) {
 		this.lstConfigs = lstConfigs;
+	}
+
+	public String getAccion() {
+		return accion;
+	}
+
+	public void setAccion(String accion) {
+		this.accion = accion;
 	}
 
 }

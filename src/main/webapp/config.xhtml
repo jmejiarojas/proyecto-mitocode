@@ -11,22 +11,44 @@
 	<ui:composition template="/WEB-INF/templates/plantilla.xhtml">
 
 		<ui:define name="content">
-			<p:ajaxStatus onstart="PF('wdlgCargando').show();"
-				onsuccess="PF('wdlgCargando').hide();" />
-			<p:dialog widgetVar="wdlgCargando" modal="true" draggable="false"
-				closable="false" resizable="false" closeOnEscape="false"
-				showHeader="false">
-				<p:graphicImage library="images" name="loading-bar.gif" />
-			</p:dialog>
+
+			<h2>Configuracion - Variables del Sistema</h2>
+
+
+			<p:messages id="msj" autoUpdate="true" showDetail="true"
+				globalOnly="true" />
+
 
 			<h:form id="frm" enctype="multipart/form-data">
-				<p:commandButton value="Nuevo"
-					oncomplete="PF('widgetDialogConfig').show();"
-					actionListener="#{configBean.limpiarControles()}"
-					update="frm:dlgConfig" />
 
-				<p:dataTable value="#{configBean.lstConfigs}" var="config"
-					styleClass="tablaSinCabecera"
+				<p:fieldset id="pgConfig" legend="#{configBean.accion}"
+					toggleable="true">
+
+
+					<h:panelGrid id="pg" columns="3">
+						<p:outputLabel for="txtClaveNueva" value="Clave" />
+						<p:inputText id="txtClaveNueva" value="#{configBean.config.clave}"
+							required="true" requiredMessage="Debe ingresar el key" />
+						<p:message for="txtClaveNueva" />
+
+						<p:outputLabel for="txtValorNuevo" value="Valor" />
+						<p:inputText id="txtValorNuevo" value="#{configBean.config.valor}"
+							required="true" requiredMessage="Debe ingresar el valor" />
+						<p:message for="txtValorNuevo" />
+
+						<p:commandButton value="Aceptar"
+							actionListener="#{configBean.operar()}"
+							update="msj, tabla, pgConfig" />
+						<p:commandButton value="Cancelar" update="pgConfig"
+							rendered="#{configBean.accion eq 'Modificar'}"
+							actionListener="#{configBean.limpiarControles()}" global="false" />
+
+					</h:panelGrid>
+
+				</p:fieldset>
+
+				<p:dataTable id="tabla" value="#{configBean.lstConfigs}"
+					var="config" styleClass="tablaSinCabecera"
 					emptyMessage="No hay configs con el criterio del filtro"
 					widgetVar="puestosTable" rows="10" paginator="true"
 					currentPageReportTemplate="Mostrando {startRecord}-{endRecord} de {totalRecords} registros"
@@ -58,38 +80,13 @@
 
 					<p:column>
 						<p:commandLink actionListener="#{configBean.seleccionar(config)}"
-							oncomplete="PF('widgetDialogConfig').show();"
-							update="frm:dlgConfig">
+							update="frm:pgConfig" process="@this">
 							<p:graphicImage library="images" name="edit.jpg" />
 						</p:commandLink>
 					</p:column>
 
 				</p:dataTable>
 
-				<p:dialog id="dlgConfig" widgetVar="widgetDialogConfig" modal="true"
-					header="Configuraciones" closable="true" closeOnEscape="true"
-					resizable="false" draggable="true">
-					<h:panelGrid columns="2">
-						<h:panelGrid columns="2">
-							<p:outputLabel value="Clave" />
-							<p:inputText value="#{configBean.config.clave}" />
-
-							<p:outputLabel value="Valor" />
-							<p:inputText value="#{configBean.config.valor}" />
-
-						</h:panelGrid>
-
-					</h:panelGrid>
-
-					<h:panelGroup layout="block" style="float: right">
-						<p:commandButton value="Aceptar"
-							actionListener="#{configBean.operar()}" ajax="false"
-							action="config?faces-redirect=true"
-							onclick="PF('wdlgCargando').show();" />
-						<p:commandButton value="Cancelar" immediate="true"
-							onclick="PF('widgetDialogConfig').hide();" />
-					</h:panelGroup>
-				</p:dialog>
 
 			</h:form>
 		</ui:define>

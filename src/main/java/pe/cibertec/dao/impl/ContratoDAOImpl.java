@@ -64,8 +64,9 @@ public class ContratoDAOImpl implements IContratoDAO, Serializable {
 		List<Contrato> listado;
 		Contrato cont = new Contrato();
 
-		Query query = manager.createQuery("FROM Contrato c where c.idContrato= ?1");
+		Query query = manager.createQuery("FROM Contrato c where c.idContrato= ?1 and c.persona.idPersona = ?2");
 		query.setParameter(1, contrato.getIdContrato());
+		query.setParameter(2, contrato.getPersona().getIdPersona());
 		listado = (List<Contrato>) query.getResultList();
 
 		if (listado != null && !listado.isEmpty()) {
