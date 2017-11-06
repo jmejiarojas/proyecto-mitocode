@@ -993,7 +993,31 @@ Y lo recibimos en la otra pagina de esta forma:
 	}
 
 OJO: Nosotros podemos pasar datos de tipo primitivo como tambien objetos.
-	 
+
+*7 Manejo de archivos properties con la tabla Config y Contratos
+
+Nosotros dentro de esta aplicacion tenemos una tabla Config que nos va a permitir tener una serie de para metros clave valor,
+por ejemplo en contrato vamos a tener una configuracion para que el sueldo minimo sea un valor detemrinado. El codigo a guiarse
+es el siguiente:
+
+	public void leerSueldoMinimo() {
+		try {
+			
+			InputStream inputStream = ContratoFormBean.class.getClassLoader().getResourceAsStream("/parametros.properties");
+			Properties properties = new Properties();
+			properties.load(inputStream);
+			
+			String parametro = properties.getProperty("sueldo_minimo");
+			Config conf = configService.leerParametro(parametro);
+			double salarioMinimo = conf.getValor() != null ? Double.parseDouble(conf.getValor()) : 0.0;
+			this.contrato.setSalario(salarioMinimo);
+			
+		} catch (Exception e) {
+			MensajeManager.mostrarMensaje("Aviso", e.getMessage(), MensajeManager.ERROR);
+		}
+	}
+
+
 
 
 

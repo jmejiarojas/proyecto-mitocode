@@ -55,5 +55,20 @@ public class ConfigDAOImpl implements IConfigDAO, Serializable {
 		
 		return con;
 	}
+	
+	public Config leerParametro(String parametro) throws Exception{
+		List<Config> lista = null;
+		Config  config = new Config();
+		Query query = manager.createQuery("FROM Config c where c.clave = ?1");
+		query.setParameter(1, parametro);
+		
+		lista = (List<Config>)query.getResultList();
+		
+		if(lista != null && !lista.isEmpty()){
+			config = lista.get(0);
+		}
+		
+		return config;
+	}
 
 }

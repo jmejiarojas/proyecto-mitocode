@@ -1,8 +1,9 @@
 package pe.cibertec.controller;
 
+import java.io.InputStream;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
@@ -11,16 +12,19 @@ import javax.inject.Named;
 
 import org.omnifaces.util.Faces;
 
+import pe.cibertec.models.Config;
 import pe.cibertec.models.Contrato;
 import pe.cibertec.models.Persona;
 import pe.cibertec.models.Puesto;
+import pe.cibertec.service.IConfigService;
 import pe.cibertec.service.IContratoService;
 import pe.cibertec.service.IPersonaService;
 import pe.cibertec.service.IPuestoService;
+import pe.cibertec.util.MensajeManager;
 
 @Named
 @ViewScoped
-public class ContratoBean implements Serializable {
+public class ContratoFormBean implements Serializable {
 
 	/**
 	 * 
@@ -44,6 +48,9 @@ public class ContratoBean implements Serializable {
 
 	@Inject
 	private IPuestoService puestoService;
+	
+	@Inject
+	private IConfigService configService;
 
 	List<Persona> lstPersonas;
 
@@ -53,12 +60,48 @@ public class ContratoBean implements Serializable {
 
 	@PostConstruct
 	public void init() {
-		//lstPersonas = new ArrayList<>();
-		//lstPuestos = new ArrayList<>();
 		this.listarPersonas();
 		this.listarPuestos();
-		this.listarContratos();
+		
+		Contrato cont = (Contrato)Faces.getFlashAttribute("contrato");
+		
+		if(cont != null){
+			//Obtenemos el contrato actual, quizas fue modificado hace milesimas de segundo en otra sesion
+			this.leer(cont);
+		}else{
+			this.leerSueldoMinimo();
+		}
 	}
+
+	public void leer(Contrato cont) {
+		try {
+			contrato = contratoService.listarPorId(cont);
+			this.persona = contrato.getPersona();
+			this.puesto = contrato.getPuesto();
+		} catch (Exception e) {
+			 MensajeManager.mostrarMensaje("Aviso", e.getMessage(), MensajeManager.ERROR);
+			
+		}
+		
+	}
+
+	public void leerSueldoMinimo() {
+		try {
+			
+			InputStream inputStream = ContratoFormBean.class.getClassLoader().getResourceAsStream("/parametros.properties");
+			Properties properties = new Properties();
+			properties.load(inputStream);
+			
+			String parametro = properties.getProperty("sueldo_minimo");
+			Config conf = configService.leerParametro(parametro);
+			double salarioMinimo = conf.getValor() != null ? Double.parseDouble(conf.getValor()) : 0.0;
+			this.contrato.setSalario(salarioMinimo);
+			
+		} catch (Exception e) {
+			MensajeManager.mostrarMensaje("Aviso", e.getMessage(), MensajeManager.ERROR);
+		}
+	}
+
 
 	public void listarPersonas() {
 		try {
@@ -78,14 +121,6 @@ public class ContratoBean implements Serializable {
 		}
 	}
 	
-	public void listarContratos() {
-		try {
-			lstContratos = contratoService.listar();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 
 	public void registrar() {
 
@@ -96,26 +131,10 @@ public class ContratoBean implements Serializable {
 			contratoService.registrar(contrato);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			MensajeManager.mostrarMensaje("Aviso", e.getMessage(), MensajeManager.ERROR);
 		}
-		this.listarContratos();
 	}
 	
-	public void selecccionar(Contrato con) throws Exception {
-		//Enviando con omnifaces, estamos pasando todo un objeto
-		Faces.setFlashAttribute("contrato", con);
-	}
-
-	public void limpiarControles() {
-		this.contrato.setSalario(0.0);
-		this.contrato.setPuesto(null);
-		this.contrato.setPersona(null);
-		this.contrato.setFechaInicio(null);
-		this.contrato.setFechaFin(null);
-		this.contrato.setEstado("1");
-		this.persona = null;
-		this.puesto = null;
-	}
 
 	/**
 	 * getters & setters

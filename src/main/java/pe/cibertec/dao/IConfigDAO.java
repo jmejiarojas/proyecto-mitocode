@@ -6,5 +6,6 @@ import pe.cibertec.models.Config;
 
 @Local
 public interface IConfigDAO extends IDAO<Config>{
-
+	
+	Config leerParametro(String parametro) throws Exception;
 }

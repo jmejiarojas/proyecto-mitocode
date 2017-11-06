@@ -43,4 +43,10 @@ public class ConfigServiceImpl implements IConfigService, Serializable{
 		return dao.listarPorId(config);
 	}
 
+	@Override
+	public Config leerParametro(String parametro) throws Exception {
+		// TODO Auto-generated method stub
+		return dao.leerParametro(parametro);
+	}
+
 }

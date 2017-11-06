@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Lista de Contratos</title>
+</h:head>
+
+<h:body>
+
+	<ui:composition template="/WEB-INF/templates/plantilla.xhtml">
+
+		<ui:define name="content">
+
+			<p:messages id="msj" showDetail="false" autoUpdate="true"
+				globalOnly="true" />
+
+			<h:form id="frm">
+				<h:panelGrid columns="4">
+					<p:outputLabel value="Persona" style="font-weight: bold;" />
+					<p:selectOneMenu id="cboPersona" value="#{contratoFormBean.persona}"
+						converter="omnifaces.SelectItemsConverter" required="true"
+						requiredMessage="Debe seleccionar una persona"
+						rendered="#{contratoFormBean.contrato.idContrato == 0}">
+						<f:selectItem itemLabel="--Seleccione--" itemValue="#{null}"
+							noSelectionOption="true" />
+						<f:selectItems value="#{contratoFormBean.lstPersonas}" var="per"
+							itemLabel="#{per.nombreCompleto}" itemValue="#{per}" />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="#{contratoFormBean.persona.nombreCompleto}"
+						rendered="#{contratoFormBean.contrato.idContrato != 0}" />
+
+					<p:message for="cboPersona" />
+					<p:tooltip for="cboPersona"
+						value="Elija una persona para el contrato" />
+
+					<p:outputLabel value="Puesto" style="font-weight: bold;" />
+					<p:selectOneMenu id="cboPuesto" value="#{contratoFormBean.puesto}"
+						required="true"
+						requiredMessage="Debe seleccionar un puesto de trabajo"
+						rendered="#{contratoFormBean.contrato.idContrato == 0}"
+						converter="omnifaces.SelectItemsConverter">
+						<f:selectItem itemLabel="--Selecccione--" itemValue="#{null}"
+							noSelectionOption="true" />
+						<f:selectItems value="#{contratoFormBean.lstPuestos}" var="pue"
+							itemLabel="#{pue.nombre}" itemValue="#{pue}" />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="#{contratoFormBean.puesto.nombre}"
+						rendered="#{contratoFormBean.contrato.idContrato != 0}" />
+					<p:message for="cboPuesto" />
+					<p:tooltip for="cboPuesto" value="Elija una puesto para la persona" />
+
+					<p:outputLabel value="Fecha de Inicio" />
+					<p:calendar id="txtFecha"
+						value="#{contratoFormBean.contrato.fechaInicio}" required="true"
+						requiredMessage="Debe indicar una fecha de inicio de contrato"
+						rendered="#{contratoFormBean.contrato.idContrato == 0}" locale="es"
+						pattern="dd/MM/yyyy" mask="99/99/9999" />
+
+					<p:outputLabel value="#{contratoFormBean.contrato.fechaInicio}"
+						rendered="#{contratoFormBean.contrato.idContrato != 0}">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</p:outputLabel>
+					<p:message for="txtFecha" />
+					<p:tooltip for="txtFecha"
+						value="Elija una fecha de inicio para el contrato" />
+
+					<p:outputLabel value="Fecha de Fin" style="font-weight: bold;" />
+					<p:calendar id="txtFechaFin"
+						value="#{contratoFormBean.contrato.fechaFin}" required="true"
+						requiredMessage="Debe indicar una fecha de fin de contrato"
+						rendered="#{contratoFormBean.contrato.idContrato == 0}"
+						locale="es" pattern="dd/MM/yyyy" mask="99/99/9999" />
+
+					<p:outputLabel value="#{contratoFormBean.contrato.fechaFin}"
+						rendered="#{contratoFormBean.contrato.idContrato != 0}">
+						<f:convertDateTime pattern="dd/MM/yyyy" style="font-weight: bold;" />
+					</p:outputLabel>
+					<p:message for="txtFechaFin" />
+					<p:tooltip for="txtFechaFin"
+						value="Elija una fecha de finalización para el contrato" />
+
+					<p:outputLabel value="Salario" style="font-weight: bold;" />
+					<p:spinner id="txtSalario" value="#{contratoFormBean.contrato.salario}"
+						required="true" requiredMessage="El salario es obligatorio"
+						rendered="#{contratoFormBean.contrato.idContrato == 0}"
+						min="#{contratoFormBean.contrato.salario}"
+						validatorMessage="El monto debe ser mayor o igual al salario mínimo" />
+
+					<p:outputLabel value="#{contratoFormBean.contrato.salario}"
+						rendered="#{contratoFormBean.contrato.idContrato != 0}">
+						<f:convertNumber currencySymbol="$" maxFractionDigits="2"
+							maxIntegerDigits="4" type="currency" />
+					</p:outputLabel>
+					<p:message for="txtSalario" />
+					<p:tooltip for="txtSalario" value="Ingrese un salario" />
+
+				</h:panelGrid>
+
+				<p:commandButton value="Aceptar" update="@form"
+					rendered="#{contratoFormBean.contrato.idContrato eq 0}"
+					actionListener="#{contratoFormBean.registrar()}"
+					action="contrato?faces-redirect=true" />
+				<p:commandButton immediate="true" value="Cancelar"
+					action="contrato?faces-redirect=true"
+					rendered="#{contratoFormBean.contrato.idContrato eq 0}" />
+				<p:commandButton value="Aceptar" immediate="true"
+					action="contrato?faces-redirect=true"
+					rendered="#{contratoFormBean.contrato.idContrato != 0}" />
+
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body>
+
+</html>
